@@ -9,22 +9,16 @@ public class LoginController {
     @FXML private PasswordField passwordField;
     @FXML private Label statusLabel;
 
-    @FXML
-    protected void handleLogin() throws IOException {
+    @FXML protected void handleLogin() throws IOException {
         if (UserManager.login(usernameField.getText(), passwordField.getText())) {
-            HelloApplication.showGameScene(); // গেম স্ক্রিনে নিয়ে যাবে
-        } else {
-            statusLabel.setText("Invalid Credentials!");
-        }
+            HelloApplication.showGameScene();
+        } else { statusLabel.setText("Invalid Credentials!"); }
     }
 
-    @FXML
-    protected void handleSignup() {
+    @FXML protected void handleSignup() {
         if (UserManager.signup(usernameField.getText(), passwordField.getText())) {
             statusLabel.setStyle("-fx-text-fill: #2ecc71;");
             statusLabel.setText("Signup Success! Now Login.");
-        } else {
-            statusLabel.setText("User already exists!");
-        }
+        } else { statusLabel.setText("User already exists!"); }
     }
 }

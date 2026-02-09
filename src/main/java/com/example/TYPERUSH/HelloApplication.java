@@ -18,21 +18,18 @@ public class HelloApplication extends Application {
         stage.show();
     }
 
-    public static void showLoginScene() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
+    public static void showLoginScene() throws IOException { updateScene("login-view.fxml"); }
+    public static void showGameScene() throws IOException { updateScene("game-view.fxml"); }
+    public static void showProfileScene() throws IOException { updateScene("profile-view.fxml"); }
+
+    private static void updateScene(String fxml) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(fxml));
+        Scene scene = new Scene(fxmlLoader.load());
         scene.getStylesheets().add(HelloApplication.class.getResource("style.css").toExternalForm());
         primaryStage.setScene(scene);
+        primaryStage.setMaximized(false);
+        primaryStage.setMaximized(true); // Force Fullscreen
     }
 
-    public static void showGameScene() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("game-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1200, 800);
-        scene.getStylesheets().add(HelloApplication.class.getResource("style.css").toExternalForm());
-        primaryStage.setScene(scene);
-    }
-
-    public static void main(String[] args) {
-        launch();
-    }
+    public static void main(String[] args) { launch(); }
 }

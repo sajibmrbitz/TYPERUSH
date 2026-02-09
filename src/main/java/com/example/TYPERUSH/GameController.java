@@ -1,8 +1,11 @@
 package com.example.TYPERUSH;
 
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
+import java.io.IOException;
 import java.util.Random;
 
 public class GameController {
@@ -10,73 +13,90 @@ public class GameController {
     @FXML private TextField inputField;
     @FXML private StackPane carContainer;
 
-    private String[] easyTexts = {"The cat is on the mat.", "Java is a fun language.", "Type fast to win the race."};
-    private String[] hardTexts = {"Adaptive learning algorithms optimize user performance.", "JavaFX provides a rich set of graphics and media APIs.", "Synchronous programming requires careful thread management."};
-
+    private String[] wordBank = {"Algorithm", "Performance", "Learning", "Adaptive", "Smooth", "Theory", "Racer", "Queen", "History", "Civics", "Amazon", "AtCoder", "BUET", "Programming", "Development"};
     private String currentText;
     private long startTime;
-    private int level = 1;
-    private int errors = 0;
+    private int totalKeyStrokes = 0, correctKeyStrokes = 0, wpm = 0, accuracy = 100, wordCount = 0;
+    private boolean isRunning = false;
+    private boolean isRaceFinished = false; // নতুন ফ্ল্যাগ
 
-    @FXML
-    public void initialize() {
-        resetGame();
-    }
+    @FXML public void initialize() { resetGame(); }
 
     public void resetGame() {
-        errors = 0;
+        totalKeyStrokes = 0; correctKeyStrokes = 0;
+        isRunning = false;
+        isRaceFinished = false; // রিসেট করা হলো
         inputField.clear();
         inputField.setEditable(true);
+        inputField.setStyle("-fx-border-color: #333;");
 
-        // Adaptive Learning: লেভেল অনুযায়ী টেক্সট সিলেক্ট করা
+        StringBuilder sb = new StringBuilder();
         Random rand = new Random();
-        currentText = (level == 1) ? easyTexts[rand.nextInt(easyTexts.length)] : hardTexts[rand.nextInt(hardTexts.length)];
+        wordCount = 12;
+        for (int i = 0; i < wordCount; i++) sb.append(wordBank[rand.nextInt(wordBank.length)]).append(" ");
+        currentText = sb.toString().trim();
 
         targetLabel.setText(currentText);
-        carContainer.setLayoutX(20);
-        startTime = System.currentTimeMillis();
+        carContainer.setLayoutX(40);
+        wpmLabel.setText("WPM: 0");
+        accuracyLabel.setText("Accuracy: 100%");
+        levelLabel.setText("Level: Adaptive");
     }
 
-    @FXML
-    protected void handleTyping() {
+    @FXML protected void handleTyping() {
+        // যদি রেস অলরেডি শেষ হয়ে থাকে, তবে আর কিছু করবে না
+        if (isRaceFinished) return;
+
         String input = inputField.getText();
-        int correctChars = 0;
+        if (input.isEmpty()) return;
 
-        // কার এনিমেশন লজিক (Progress based)
-        double progress = (double) input.length() / currentText.length();
-        carContainer.setLayoutX(20 + (progress * 1000));
-
-        // ভুল চেক করা (Red text if wrong)
-        if (!currentText.startsWith(input)) {
-            inputField.setStyle("-fx-text-fill: red;");
-            errors++;
-        } else {
-            inputField.setStyle("-fx-text-fill: black;");
+        if (!isRunning) {
+            startTime = System.currentTimeMillis();
+            isRunning = true;
         }
 
-        // গেম শেষ হলে
+        totalKeyStrokes++;
+
+        if (currentText.startsWith(input)) {
+            correctKeyStrokes = input.length();
+            double progress = (double) input.length() / currentText.length();
+            carContainer.setLayoutX(40 + (progress * 1000));
+            updateStats(input.length());
+            inputField.setStyle("-fx-border-color: #2ecc71;");
+        } else {
+            carContainer.setLayoutX(Math.max(40, carContainer.getLayoutX() - 15));
+            inputField.setStyle("-fx-border-color: #ff4757;");
+        }
+
+        // রেস শেষ হওয়ার লজিক
         if (input.equals(currentText)) {
-            long endTime = System.currentTimeMillis();
-            calculateStats(endTime - startTime);
+            isRunning = false;
+            isRaceFinished = true; // রেস শেষ হিসেবে মার্ক করা হলো
             inputField.setEditable(false);
+            saveResult();
         }
     }
 
-    private void calculateStats(long timeMillis) {
-        double minutes = timeMillis / 60000.0;
-        int wpm = (int) ((currentText.length() / 5.0) / minutes);
-        int accuracy = Math.max(0, 100 - (errors * 100 / currentText.length()));
+    private void updateStats(int len) {
+        long elapsed = System.currentTimeMillis() - startTime;
+        if (elapsed <= 0) return;
+
+        wpm = (int) ((len / 5.0) / (elapsed / 60000.0));
+        accuracy = (int) ((double) correctKeyStrokes / totalKeyStrokes * 100);
 
         wpmLabel.setText("WPM: " + wpm);
-        accuracyLabel.setText("Accuracy: " + accuracy + "%");
-
-        // Adaptive Learning Logic: রিসার্চের মূল অংশ
-        if (wpm > 40 && accuracy > 90) {
-            level = 2;
-            levelLabel.setText("Level: 2 (Hard) - Adaptive Boost!");
-        } else {
-            level = 1;
-            levelLabel.setText("Level: 1 (Easy)");
-        }
+        accuracyLabel.setText("Accuracy: " + Math.min(100, accuracy) + "%");
     }
+
+    private void saveResult() {
+        double timeTaken = (System.currentTimeMillis() - startTime) / 1000.0;
+        // নিশ্চিত করা হচ্ছে যে টাইম ০ এর বেশি
+        if (timeTaken <= 0.1) return;
+
+        UserManager.currentUser.addResult(new RaceResult(wpm, accuracy, timeTaken, wordCount));
+        UserManager.saveUsers();
+        levelLabel.setText("Race Finished & Saved!");
+    }
+
+    @FXML protected void goToProfile() throws IOException { HelloApplication.showProfileScene(); }
 }

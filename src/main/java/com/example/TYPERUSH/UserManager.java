@@ -6,6 +6,7 @@ import java.util.HashMap;
 public class UserManager {
     private static final String FILE_NAME = "users.dat";
     private static HashMap<String, User> users = new HashMap<>();
+    public static User currentUser;
 
     public static void loadUsers() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_NAME))) {
@@ -28,6 +29,10 @@ public class UserManager {
 
     public static boolean login(String username, String password) {
         User user = users.get(username);
-        return user != null && user.getPassword().equals(password);
+        if (user != null && user.getPassword().equals(password)) {
+            currentUser = user;
+            return true;
+        }
+        return false;
     }
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="30.0" styleClass="game-root" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.TYPERUSH.ProfileController">
+    <Label styleClass="login-title" text="RACE HISTORY" />
+
+    <TableView fx:id="historyTable" maxWidth="1100" prefHeight="500">
+        <columns>
+            <TableColumn fx:id="dateCol" prefWidth="250" text="Date &amp; Time" />
+            <TableColumn fx:id="wpmCol" prefWidth="150" text="WPM" />
+            <TableColumn fx:id="accCol" prefWidth="200" text="Accuracy (%)" />
+            <TableColumn fx:id="timeCol" prefWidth="250" text="Time Taken (s)" />
+            <TableColumn fx:id="wordsCol" prefWidth="200" text="Word Count" />
+        </columns>
+    </TableView>
+
+    <HBox spacing="20" alignment="CENTER">
+        <Button text="SORT BY WPM" onAction="#sortHistory" styleClass="btn-premium"/>
+        <Button text="BACK TO GAME" onAction="#backToGame" styleClass="btn-signup"/>
+    </HBox>
+</VBox>

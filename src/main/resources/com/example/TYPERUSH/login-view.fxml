@@ -5,25 +5,56 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" spacing="30.0" styleClass="root" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.TYPERUSH.LoginController">
-    <padding>
-        <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-    </padding>
+<StackPane styleClass="login-root" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.TYPERUSH.LoginController">
+    <children>
+        <!-- Main Login Card -->
+        <VBox alignment="CENTER" maxWidth="550.0" spacing="45.0" styleClass="login-card">
+            <children>
 
-    <Text styleClass="title-text" text="TYPERUSH DASHBOARD" />
+                <!-- Header Section -->
+                <VBox alignment="CENTER" spacing="12.0">
+                    <children>
+                        <Text styleClass="login-title" text="TYPERUSH" />
+                        <Label style="-fx-text-fill: #888888; -fx-font-size: 15px; -fx-letter-spacing: 3px; -fx-font-weight: bold;" text="MASTER THE ART OF SPEED" />
+                    </children>
+                </VBox>
 
-    <VBox alignment="CENTER" maxWidth="400.0" spacing="15.0" style="-fx-background-color: rgba(255, 255, 255, 0.2); -fx-background-radius: 20; -fx-padding: 40;">
-        <Label style="-fx-text-fill: white; -fx-font-size: 18px;" text="Username" />
-        <TextField fx:id="usernameField" prefHeight="40.0" promptText="Enter your username" style="-fx-background-radius: 10;" />
+                <!-- Input Fields Section -->
+                <VBox spacing="25.0">
+                    <children>
+                        <!-- Username Field -->
+                        <VBox spacing="10.0">
+                            <children>
+                                <Label style="-fx-text-fill: #cccccc; -fx-font-size: 13px; -fx-font-weight: bold;" text="USERNAME" />
+                                <TextField fx:id="usernameField" prefHeight="55.0" promptText="Enter your username" styleClass="login-input" />
+                            </children>
+                        </VBox>
 
-        <Label style="-fx-text-fill: white; -fx-font-size: 18px;" text="Password" />
-        <PasswordField fx:id="passwordField" prefHeight="40.0" promptText="Enter your password" style="-fx-background-radius: 10;" />
+                        <!-- Password Field -->
+                        <VBox spacing="10.0">
+                            <children>
+                                <Label style="-fx-text-fill: #cccccc; -fx-font-size: 13px; -fx-font-weight: bold;" text="PASSWORD" />
+                                <PasswordField fx:id="passwordField" prefHeight="55.0" promptText="Enter your password" styleClass="login-input" />
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
 
-        <HBox alignment="CENTER" spacing="20.0">
-            <Button onAction="#handleLogin" prefHeight="45.0" prefWidth="120.0" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10;" text="LOGIN" />
-            <Button onAction="#handleSignup" prefHeight="45.0" prefWidth="120.0" style="-fx-background-color: #2980b9; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10;" text="SIGNUP" />
-        </HBox>
+                <!-- Action Buttons -->
+                <HBox alignment="CENTER" spacing="25.0">
+                    <children>
+                        <Button onAction="#handleLogin" prefHeight="55.0" prefWidth="190.0" styleClass="btn-login" text="LOGIN" />
+                        <Button onAction="#handleSignup" prefHeight="55.0" prefWidth="190.0" styleClass="btn-signup" text="SIGNUP" />
+                    </children>
+                </HBox>
 
-        <Label fx:id="statusLabel" style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" text="" />
-    </VBox>
-</VBox>
+                <!-- Status Message Area -->
+                <Label fx:id="statusLabel" styleClass="status-msg" text="" />
+
+            </children>
+            <padding>
+                <Insets bottom="60.0" left="60.0" right="60.0" top="60.0" />
+            </padding>
+        </VBox>
+    </children>
+</StackPane>
