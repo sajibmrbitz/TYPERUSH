@@ -1,0 +1,53 @@
+.root {
+    -fx-background-color: #2c3e50;
+}
+
+.game-root {
+    -fx-background-color: linear-gradient(to bottom right, #1a2a6c, #b21f1f, #fdbb2d);
+    -fx-padding: 40;
+}
+
+.title-text {
+    -fx-font-size: 45px;
+    -fx-fill: white;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 5);
+}
+
+.target-text {
+    -fx-font-size: 26px;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-background-color: rgba(0,0,0,0.6);
+    -fx-padding: 25;
+    -fx-background-radius: 15;
+    -fx-border-color: #f1c40f;
+    -fx-border-radius: 15;
+}
+
+.typing-input {
+    -fx-font-size: 24px;
+    -fx-background-radius: 15;
+    -fx-border-color: #ffffff;
+    -fx-border-width: 2;
+    -fx-background-color: rgba(255,255,255,0.9);
+}
+
+.stat-text {
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10;
+    -fx-background-color: rgba(0,0,0,0.3);
+    -fx-background-radius: 10;
+}
+
+.restart-btn {
+    -fx-background-color: #27ae60;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 35;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}

@@ -5,7 +5,7 @@ plugins {
     id 'org.beryx.jlink' version '2.25.0'
 }
 
-group 'com.example'
+group 'com.example.TYPERUSH'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -24,8 +24,8 @@ tasks.withType(JavaCompile) {
 }
 
 application {
-    mainModule = 'com.example.javafxdemo'
-    mainClass = 'com.example.javafxdemo.HelloApplication'
+    mainModule = 'com.example.TYPERUSH'
+    mainClass = 'com.example.TYPERUSH.Launcher'
 }
 
 javafx {
@@ -39,7 +39,6 @@ dependencies {
         exclude(group: 'org.openjfx')
     }
     implementation('org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0')
-
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
@@ -54,8 +53,4 @@ jlink {
     launcher {
         name = 'app'
     }
-}
-
-jlinkZip {
-    group = 'distribution'
 }
