@@ -1,102 +1,111 @@
 package com.example.TYPERUSH;
-
-import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
-import javafx.util.Duration;
-import java.io.IOException;
 import java.util.Random;
 
-public class GameController {
+public class GameController extends BaseController { // Inheritance
     @FXML private Label targetLabel, wpmLabel, accuracyLabel, levelLabel;
     @FXML private TextField inputField;
     @FXML private StackPane carContainer;
 
-    private String[] wordBank = {"Algorithm", "Performance", "Learning", "Adaptive", "Smooth", "Theory", "Racer", "Queen", "History", "Civics", "Amazon", "AtCoder", "BUET", "Programming", "Development"};
+    private String[] wordBank = {
+            "Artificial intelligence is the simulation of human intelligence processes by machines, especially computer systems.",
+            "Java is a high-level, class-based, object-oriented programming language designed to have few dependencies.",
+            "Global warming is the long-term heating of Earth surface observed since the pre-industrial period."
+    };
+
     private String currentText;
     private long startTime;
-    private int totalKeyStrokes = 0, correctKeyStrokes = 0, wpm = 0, accuracy = 100, wordCount = 0;
+    private int totalKeyStrokes, correctKeyStrokes, wpm, accuracy;
     private boolean isRunning = false;
-    private boolean isRaceFinished = false; // নতুন ফ্ল্যাগ
+    private boolean isRaceFinished = false;
 
     @FXML public void initialize() { resetGame(); }
 
     public void resetGame() {
-        totalKeyStrokes = 0; correctKeyStrokes = 0;
         isRunning = false;
-        isRaceFinished = false; // রিসেট করা হলো
+        isRaceFinished = false;
+        totalKeyStrokes = 0;
+        correctKeyStrokes = 0;
         inputField.clear();
         inputField.setEditable(true);
-        inputField.setStyle("-fx-border-color: #333;");
 
-        StringBuilder sb = new StringBuilder();
         Random rand = new Random();
-        wordCount = 12;
-        for (int i = 0; i < wordCount; i++) sb.append(wordBank[rand.nextInt(wordBank.length)]).append(" ");
-        currentText = sb.toString().trim();
-
+        currentText = wordBank[rand.nextInt(wordBank.length)];
         targetLabel.setText(currentText);
         carContainer.setLayoutX(40);
+
         wpmLabel.setText("WPM: 0");
         accuracyLabel.setText("Accuracy: 100%");
-        levelLabel.setText("Level: Adaptive");
     }
 
     @FXML protected void handleTyping() {
-        // যদি রেস অলরেডি শেষ হয়ে থাকে, তবে আর কিছু করবে না
         if (isRaceFinished) return;
-
-        String input = inputField.getText();
-        if (input.isEmpty()) return;
 
         if (!isRunning) {
             startTime = System.currentTimeMillis();
             isRunning = true;
+            startTimerThread(); // Threading start
         }
 
+        String input = inputField.getText();
         totalKeyStrokes++;
 
         if (currentText.startsWith(input)) {
             correctKeyStrokes = input.length();
             double progress = (double) input.length() / currentText.length();
-            carContainer.setLayoutX(40 + (progress * 1000));
-            updateStats(input.length());
+            carContainer.setLayoutX(40 + (progress * 950));
             inputField.setStyle("-fx-border-color: #2ecc71;");
         } else {
-            carContainer.setLayoutX(Math.max(40, carContainer.getLayoutX() - 15));
             inputField.setStyle("-fx-border-color: #ff4757;");
         }
 
-        // রেস শেষ হওয়ার লজিক
         if (input.equals(currentText)) {
             isRunning = false;
-            isRaceFinished = true; // রেস শেষ হিসেবে মার্ক করা হলো
+            isRaceFinished = true;
             inputField.setEditable(false);
             saveResult();
         }
     }
 
-    private void updateStats(int len) {
+    private void startTimerThread() {
+        Thread timerThread = new Thread(() -> {
+            while (isRunning) {
+                try {
+                    Thread.sleep(500);
+                    Platform.runLater(() -> updateStats());
+                } catch (InterruptedException e) {
+                    System.out.println("Thread Error: " + e.getMessage());
+                }
+            }
+        });
+        timerThread.setDaemon(true);
+        timerThread.start();
+    }
+
+    private void updateStats() {
         long elapsed = System.currentTimeMillis() - startTime;
-        if (elapsed <= 0) return;
-
-        wpm = (int) ((len / 5.0) / (elapsed / 60000.0));
-        accuracy = (int) ((double) correctKeyStrokes / totalKeyStrokes * 100);
-
-        wpmLabel.setText("WPM: " + wpm);
-        accuracyLabel.setText("Accuracy: " + Math.min(100, accuracy) + "%");
+        if (elapsed > 0) {
+            int currentLen = inputField.getText().length();
+            wpm = (int) ((currentLen / 5.0) / (elapsed / 60000.0));
+            accuracy = (totalKeyStrokes > 0) ? (int) ((double) correctKeyStrokes / totalKeyStrokes * 100) : 100;
+            wpmLabel.setText("WPM: " + wpm);
+            accuracyLabel.setText("Accuracy: " + Math.min(100, accuracy) + "%");
+        }
     }
 
     private void saveResult() {
         double timeTaken = (System.currentTimeMillis() - startTime) / 1000.0;
-        // নিশ্চিত করা হচ্ছে যে টাইম ০ এর বেশি
-        if (timeTaken <= 0.1) return;
-
-        UserManager.currentUser.addResult(new RaceResult(wpm, accuracy, timeTaken, wordCount));
+        int wordCount = currentText.split("\\s+").length;
+        RaceResult result = new RaceResult(wpm, accuracy, timeTaken, wordCount);
+        UserManager.currentUser.addResult(result);
         UserManager.saveUsers();
-        levelLabel.setText("Race Finished & Saved!");
+        levelLabel.setText("Race Saved!");
     }
 
-    @FXML protected void goToProfile() throws IOException { HelloApplication.showProfileScene(); }
+    @FXML protected void goToProfile() {
+        switchScene("profile-view.fxml", "User Profile"); // BaseController method
+    }
 }
