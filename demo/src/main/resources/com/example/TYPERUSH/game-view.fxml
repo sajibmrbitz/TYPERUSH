@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
 
 <VBox alignment="TOP_CENTER" spacing="30.0" styleClass="game-root" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.TYPERUSH.GameController">
     <Pane prefHeight="200.0" prefWidth="1200.0" styleClass="race-track">
         <children>
             <Label layoutX="1150.0" layoutY="40.0" style="-fx-font-size: 80px;" text="🏁" />
             <StackPane fx:id="carContainer" layoutX="40.0" layoutY="50.0" styleClass="car-glow">
-                <Label style="-fx-font-size: 100px;" text="🏎️" />
+                <ImageView fitWidth="120.0" fitHeight="70.0" preserveRatio="true">
+                    <image>
+                        <Image url="@car.png" />
+                    </image>
+                </ImageView>
             </StackPane>
         </children>
     </Pane>

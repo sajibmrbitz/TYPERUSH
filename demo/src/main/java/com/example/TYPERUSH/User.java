@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User implements Serializable {
-    private String username, password;
+    private String username;
+    private String password;
     private List<RaceResult> history = new ArrayList<>();
 
     public User(String username, String password) {

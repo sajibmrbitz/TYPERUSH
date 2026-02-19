@@ -8,16 +8,25 @@ public class UserManager {
     private static HashMap<String, User> users = new HashMap<>();
     public static User currentUser;
 
+    @SuppressWarnings("unchecked")
     public static void loadUsers() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_NAME))) {
+        File file = new File(FILE_NAME);
+        if (!file.exists()) return;
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             users = (HashMap<String, User>) ois.readObject();
-        } catch (Exception e) { users = new HashMap<>(); }
+        } catch (IOException | ClassNotFoundException e) {
+            users = new HashMap<>();
+            System.err.println("Database load error: " + e.getMessage());
+        }
     }
 
     public static void saveUsers() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
             oos.writeObject(users);
-        } catch (IOException e) { e.printStackTrace(); }
+        } catch (IOException e) {
+            System.err.println("Database save error: " + e.getMessage());
+        }
     }
 
     public static boolean signup(String username, String password) {

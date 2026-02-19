@@ -19,7 +19,6 @@ public class RaceResult implements Serializable {
         this.dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
-    // Getters for TableView
     public int getWpm() { return wpm; }
     public int getAccuracy() { return accuracy; }
     public double getTimeSeconds() { return timeSeconds; }

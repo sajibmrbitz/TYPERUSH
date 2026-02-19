@@ -5,16 +5,13 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import java.io.IOException;
 import java.util.Comparator;
 
-public class ProfileController {
+public class ProfileController extends BaseController {
     @FXML private TableView<RaceResult> historyTable;
     @FXML private TableColumn<RaceResult, String> dateCol;
     @FXML private TableColumn<RaceResult, Integer> wpmCol, accCol, wordsCol;
     @FXML private TableColumn<RaceResult, Double> timeCol;
-
-    private ObservableList<RaceResult> data;
 
     @FXML public void initialize() {
         dateCol.setCellValueFactory(new PropertyValueFactory<>("dateTime"));
@@ -23,13 +20,17 @@ public class ProfileController {
         timeCol.setCellValueFactory(new PropertyValueFactory<>("timeSeconds"));
         wordsCol.setCellValueFactory(new PropertyValueFactory<>("wordCount"));
 
-        data = FXCollections.observableArrayList(UserManager.currentUser.getHistory());
-        historyTable.setItems(data);
+        if (UserManager.currentUser != null) {
+            ObservableList<RaceResult> data = FXCollections.observableArrayList(UserManager.currentUser.getHistory());
+            historyTable.setItems(data);
+        }
     }
 
     @FXML protected void sortHistory() {
-        data.sort(Comparator.comparingInt(RaceResult::getWpm).reversed());
+        historyTable.getItems().sort(Comparator.comparingInt(RaceResult::getWpm).reversed());
     }
 
-    @FXML protected void backToGame() throws IOException { HelloApplication.showGameScene(); }
+    @FXML protected void backToGame() {
+        switchScene("game-view.fxml", "TypeRush Game");
+    }
 }
