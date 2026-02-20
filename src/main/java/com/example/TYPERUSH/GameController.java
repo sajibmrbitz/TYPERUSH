@@ -78,11 +78,11 @@ public class GameController extends BaseController {
             if (i < inputLength) {
                 if (input.charAt(i) == currentText.charAt(i)) {
                     // Correct character
-                    l.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-size: 24px; -fx-font-family: 'Courier New';");
+                    l.setStyle("-fx-background-color: rgba(46, 204, 113, 0.3); -fx-text-fill: white; -fx-font-size: 24px; -fx-font-family: 'Courier New';");
                     currentCorrectInInput++;
                 } else {
                     // Wrong character
-                    l.setStyle("-fx-background-color: #ff4757; -fx-text-fill: white; -fx-font-size: 24px; -fx-font-family: 'Courier New';");
+                    l.setStyle("-fx-background-color: rgba(255, 71, 87, 0.4); -fx-text-fill: white; -fx-font-size: 24px; -fx-font-family: 'Courier New';");
                 }
             } else {
                 l.setStyle("-fx-background-color: transparent; -fx-text-fill: #888; -fx-font-size: 24px; -fx-font-family: 'Courier New';");
