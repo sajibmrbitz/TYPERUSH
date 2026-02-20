@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.TYPERUSH.MenuController">
+    <children>
+
+        <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+
+                <VBox alignment="CENTER" spacing="20.0" style="-fx-background-color: #0D0D0D;" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label text="TypeRush" textFill="#00e5ff">
+                            <font>
+                                <Font name="System Bold Italic" size="72.0" />
+                            </font>
+                        </Label>
+                        <Label text="Welcome" textFill="WHITE">
+                            <font>
+                                <Font name="System Italic" size="36.0" />
+                            </font>
+                        </Label>
+                        <Label text="to the" textFill="WHITE">
+                            <font>
+                                <Font name="System Italic" size="24.0" />
+                            </font>
+                        </Label>
+                        <Label text="world of" textFill="WHITE">
+                            <font>
+                                <Font name="System Italic" size="28.0" />
+                            </font>
+                        </Label>
+                        <Label text="Racing" textFill="#00e5ff">
+                            <font>
+                                <Font name="System Bold Italic" size="48.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+
+                <VBox alignment="CENTER" spacing="50.0" style="-fx-background-color: #00E5FF;" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Button mnemonicParsing="false" onAction="#racing_part" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: #0D0D0D; -fx-text-fill: #00E5FF; -fx-background-radius: 40; -fx-cursor: hand;" text="Type Race">
+                            <font>
+                                <Font name="System Bold" size="30.0" />
+                            </font>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#tutorPart" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: #0D0D0D; -fx-text-fill: #00E5FF; -fx-background-radius: 40; -fx-cursor: hand;" text="Type Tutor">
+                            <font>
+                                <Font name="System Bold" size="30.0" />
+                            </font>
+                        </Button>
+                    </children>
+                </VBox>
+
+            </children>
+        </HBox>
+    </children>
+</AnchorPane>

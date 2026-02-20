@@ -1,0 +1,42 @@
+.root { -fx-background-color: #0f0c29; }
+.login-root { -fx-background-color: linear-gradient(to bottom right, #0f0c29, #302b63, #24243e); }
+.login-card { -fx-background-color: rgba(255, 255, 255, 0.05); -fx-background-radius: 30; -fx-padding: 50; }
+.login-title { -fx-font-size: 42px; -fx-fill: #e2b714; -fx-font-weight: bold; }
+.login-input { -fx-background-color: rgba(255, 255, 255, 0.08); -fx-text-fill: white; -fx-background-radius: 12; }
+.btn-login { -fx-background-color: #e2b714; -fx-text-fill: black; -fx-font-weight: bold; -fx-background-radius: 10; }
+.btn-signup { -fx-background-color: transparent; -fx-text-fill: #e2b714; -fx-border-color: #e2b714; -fx-border-radius: 10; }
+
+.game-root { -fx-background-color: #0a0a0a; -fx-padding: 40; }
+.race-track { -fx-background-color: #1a1a1a; -fx-background-radius: 40; -fx-border-color: #e2b714; -fx-border-style: dashed; }
+.car-glow { -fx-effect: dropshadow(gaussian, #e2b714, 30, 0.5, 0, 0); }
+.target-text { -fx-font-size: 28px; -fx-text-fill: #888; -fx-font-family: "Courier New"; -fx-background-color: rgba(0,0,0,0.6); -fx-padding: 20; -fx-background-radius: 15; }
+.typing-input { -fx-font-size: 30px; -fx-background-color: #1a1a1a; -fx-text-fill: #e2b714; -fx-background-radius: 15; -fx-border-color: #333; }
+.stat-text { -fx-font-size: 24px; -fx-text-fill: #e2b714; -fx-font-weight: bold; }
+.btn-premium { -fx-background-color: #e2b714; -fx-text-fill: black; -fx-font-weight: bold; -fx-padding: 10 30; -fx-background-radius: 10; }
+
+.table-view { -fx-background-color: transparent; -fx-border-color: #e2b714; }
+.table-view .column-header { -fx-background-color: #1e1e1e; }
+.table-view .column-header .label { -fx-text-fill: white; -fx-font-weight: bold; }
+.table-view .table-cell { -fx-text-fill: #e2b714; -fx-font-size: 16px; -fx-alignment: center; }
+.intro-prompt {
+    -fx-font-size: 20px;
+    -fx-text-fill: #e2b714;
+    -fx-font-family: "Courier New";
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 5px;
+    -fx-effect: dropshadow(gaussian, #e2b714, 20, 0.4, 0, 0);
+}
+.intro-title {
+    -fx-font-size: 90px;
+    -fx-text-fill: #e2b714;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 2px;
+    -fx-effect: dropshadow(gaussian, #e2b714, 10, 0.1, 0, 0);
+}
+
+.intro-subtitle {
+    -fx-text-fill: #cccccc;
+    -fx-font-size: 22px;
+    -fx-letter-spacing: 8px; /* Wide spacing looks very modern */
+    -fx-font-weight: bold;
+}
