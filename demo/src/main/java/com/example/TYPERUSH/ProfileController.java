@@ -20,12 +20,10 @@ public class ProfileController extends BaseController {
         timeCol.setCellValueFactory(new PropertyValueFactory<>("timeSeconds"));
         wordsCol.setCellValueFactory(new PropertyValueFactory<>("wordCount"));
 
-        if (UserManager.currentUser != null) {
-            ObservableList<RaceResult> data = FXCollections.observableArrayList(UserManager.currentUser.getHistory());
-            historyTable.setItems(data);
-        }
-    }
 
+        ObservableList<RaceResult> data = FXCollections.observableArrayList(UserManager.localHistory);
+        historyTable.setItems(data);
+    }
     @FXML protected void sortHistory() {
         historyTable.getItems().sort(Comparator.comparingInt(RaceResult::getWpm).reversed());
     }

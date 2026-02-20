@@ -171,9 +171,9 @@ public class GameController extends BaseController {
 
         if (timeTaken > 0.1) {
             RaceResult res = new RaceResult(wpm, accuracy, timeTaken, wordCount);
-            UserManager.currentUser.addResult(res);
-            UserManager.saveUsers();
+            UserManager.addResult(res);
             levelLabel.setText("Race Saved!");
+
         }
     }
 

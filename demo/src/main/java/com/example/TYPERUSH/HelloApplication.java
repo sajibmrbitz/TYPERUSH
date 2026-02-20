@@ -15,7 +15,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         primaryStage = stage;
-        UserManager.loadUsers();
+        UserManager.loadHistory();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("intro-view.fxml"));
         Scene scene = new Scene(loader.load());

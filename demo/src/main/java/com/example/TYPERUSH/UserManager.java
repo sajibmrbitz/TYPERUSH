@@ -1,47 +1,47 @@
 package com.example.TYPERUSH;
 
 import java.io.*;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserManager {
-    private static final String FILE_NAME = "users.dat";
-    private static HashMap<String, User> users = new HashMap<>();
-    public static User currentUser;
+    // The single list that holds all your local results
+    public static List<RaceResult> localHistory = new ArrayList<>();
 
-    @SuppressWarnings("unchecked")
-    public static void loadUsers() {
-        File file = new File(FILE_NAME);
-        if (!file.exists()) return;
+    // 1. Load the history when the game starts
+    public static void loadHistory() {
+        try {
+            FileInputStream fileIn = new FileInputStream("local_history.dat");
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
 
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            users = (HashMap<String, User>) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            users = new HashMap<>();
-            System.err.println("Database load error: " + e.getMessage());
+            // Read the saved list into our variable
+            localHistory = (List<RaceResult>) objectIn.readObject();
+
+            objectIn.close();
+        } catch (Exception e) {
+            // Start with a blank list if the file doesn't exist yet
+            localHistory = new ArrayList<>();
         }
     }
 
-    public static void saveUsers() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
-            oos.writeObject(users);
-        } catch (IOException e) {
-            System.err.println("Database save error: " + e.getMessage());
+    // 2. Save the history
+    public static void saveHistory() {
+        try {
+            FileOutputStream fileOut = new FileOutputStream("local_history.dat");
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+
+            // Write our entire list into the file
+            objectOut.writeObject(localHistory);
+
+            objectOut.close();
+        } catch (Exception e) {
+            System.out.println("Could not save the file.");
         }
     }
 
-    public static boolean signup(String username, String password) {
-        if (users.containsKey(username)) return false;
-        users.put(username, new User(username, password));
-        saveUsers();
-        return true;
-    }
-
-    public static boolean login(String username, String password) {
-        User user = users.get(username);
-        if (user != null && user.getPassword().equals(password)) {
-            currentUser = user;
-            return true;
-        }
-        return false;
+    // 3. Add a result and save immediately (Brought this back!)
+    public static void addResult(RaceResult result) {
+        localHistory.add(result);
+        saveHistory();
     }
 }

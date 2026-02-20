@@ -36,7 +36,7 @@ public class IntroController extends BaseController {
                 FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.8), rootPane);
                 fadeOut.setFromValue(1.0);
                 fadeOut.setToValue(0.0);
-                fadeOut.setOnFinished(e -> switchScene("login-view.fxml", "User Login"));
+                fadeOut.setOnFinished(e -> switchScene("menu-view.fxml", "TypeRush Game   "));
                 fadeOut.play();
             });
         });
