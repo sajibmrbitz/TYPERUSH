@@ -149,4 +149,5 @@ public class GameController extends BaseController {
     }
 
     @FXML protected void goToProfile() { switchScene("profile-view.fxml", "User Profile"); }
+    @FXML protected void menupage(){  switchScene("menu-view.fxml", "Menu Page");}
 }

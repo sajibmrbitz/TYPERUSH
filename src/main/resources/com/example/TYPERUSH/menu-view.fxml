@@ -1,60 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.GaussianBlur?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.TYPERUSH.MenuController">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #0D1117;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.TYPERUSH.MenuController">
     <children>
+
+        <StackPane layoutX="800.0" layoutY="-100.0" prefHeight="500.0" prefWidth="500.0" style="-fx-background-color: #00E5FF; -fx-background-radius: 500; -fx-opacity: 0.12;">
+            <effect>
+                <GaussianBlur radius="120.0" />
+            </effect>
+        </StackPane>
+
+        <StackPane layoutX="-150.0" layoutY="400.0" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: #0066FF; -fx-background-radius: 500; -fx-opacity: 0.12;">
+            <effect>
+                <GaussianBlur radius="120.0" />
+            </effect>
+        </StackPane>
 
         <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
 
-                <VBox alignment="CENTER" spacing="20.0" style="-fx-background-color: #0D0D0D;" HBox.hgrow="ALWAYS">
+                <VBox alignment="CENTER_LEFT" prefWidth="640.0" spacing="5.0" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets left="120.0" />
+                    </padding>
                     <children>
-                        <Label text="TypeRush" textFill="#00e5ff">
+                        <Label text="TypeRush." textFill="#ffffff">
                             <font>
-                                <Font name="System Bold Italic" size="72.0" />
+                                <Font name="System Bold" size="80.0" />
                             </font>
                         </Label>
-                        <Label text="Welcome" textFill="WHITE">
+
+                        <StackPane alignment="CENTER_LEFT" prefHeight="4.0" prefWidth="100.0" style="-fx-background-color: #00E5FF; -fx-max-width: 80;">
+                            <VBox.margin>
+                                <Insets bottom="20.0" top="5.0" />
+                            </VBox.margin>
+                            <effect>
+                                <DropShadow color="#00e5ff" radius="10.0" spread="0.5" />
+                            </effect>
+                        </StackPane>
+
+                        <Label text="Welcome to the" textFill="#8b949e">
                             <font>
-                                <Font name="System Italic" size="36.0" />
+                                <Font name="System" size="32.0" />
                             </font>
                         </Label>
-                        <Label text="to the" textFill="WHITE">
+
+                        <Label text="next generation" textFill="#8b949e">
                             <font>
-                                <Font name="System Italic" size="24.0" />
+                                <Font name="System" size="32.0" />
                             </font>
                         </Label>
-                        <Label text="world of" textFill="WHITE">
+
+                        <Label text="of Racing." textFill="#00e5ff">
                             <font>
-                                <Font name="System Italic" size="28.0" />
+                                <Font name="System Bold" size="40.0" />
                             </font>
-                        </Label>
-                        <Label text="Racing" textFill="#00e5ff">
-                            <font>
-                                <Font name="System Bold Italic" size="48.0" />
-                            </font>
+                            <effect>
+                                <DropShadow color="#00e5ff40" radius="15.0" spread="0.1" />
+                            </effect>
                         </Label>
                     </children>
                 </VBox>
 
-                <VBox alignment="CENTER" spacing="50.0" style="-fx-background-color: #00E5FF;" HBox.hgrow="ALWAYS">
+                <VBox alignment="CENTER" prefWidth="640.0" spacing="35.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <Button mnemonicParsing="false" onAction="#racing_part" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: #0D0D0D; -fx-text-fill: #00E5FF; -fx-background-radius: 40; -fx-cursor: hand;" text="Type Race">
+
+                        <Button mnemonicParsing="false" onAction="#racing_part" prefHeight="70.0" prefWidth="320.0" style="-fx-background-color: transparent; -fx-border-color: #00E5FF; -fx-border-width: 2; -fx-border-radius: 8; -fx-text-fill: #00E5FF; -fx-cursor: hand; -fx-padding: 10 20;" text="TYPE RACE">
                             <font>
-                                <Font name="System Bold" size="30.0" />
+                                <Font name="System Bold" size="22.0" />
+                            </font>
+                            <effect>
+                                <DropShadow color="#00e5ff30" offsetY="5.0" radius="15.0" />
+                            </effect>
+                        </Button>
+
+                        <Button mnemonicParsing="false" onAction="#tutorPart" prefHeight="70.0" prefWidth="320.0" style="-fx-background-color: transparent; -fx-border-color: #444c56; -fx-border-width: 2; -fx-border-radius: 8; -fx-text-fill: #c9d1d9; -fx-cursor: hand; -fx-padding: 10 20;" text="TYPE TUTOR">
+                            <font>
+                                <Font name="System Bold" size="22.0" />
                             </font>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#tutorPart" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: #0D0D0D; -fx-text-fill: #00E5FF; -fx-background-radius: 40; -fx-cursor: hand;" text="Type Tutor">
-                            <font>
-                                <Font name="System Bold" size="30.0" />
-                            </font>
-                        </Button>
+
                     </children>
                 </VBox>
 

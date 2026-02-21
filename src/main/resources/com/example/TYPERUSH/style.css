@@ -5,7 +5,7 @@
 .login-input { -fx-background-color: rgba(255, 255, 255, 0.08); -fx-text-fill: white; -fx-background-radius: 12; }
 .btn-login { -fx-background-color: #e2b714; -fx-text-fill: black; -fx-font-weight: bold; -fx-background-radius: 10; }
 .btn-signup { -fx-background-color: transparent; -fx-text-fill: #e2b714; -fx-border-color: #e2b714; -fx-border-radius: 10; }
-
+.btn-backtomenu{ -fx-background-color: transparent; -fx-text-fill: #e2b714; -fx-border-color: #e2b714; -fx-border-radius: 10;}
 .game-root { -fx-background-color: #0a0a0a; -fx-padding: 40; }
 .race-track { -fx-background-color: #1a1a1a; -fx-background-radius: 40; -fx-border-color: #e2b714; -fx-border-style: dashed; }
 .car-glow { -fx-effect: dropshadow(gaussian, #e2b714, 30, 0.5, 0, 0); }
