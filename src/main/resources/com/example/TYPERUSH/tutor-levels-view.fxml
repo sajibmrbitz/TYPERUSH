@@ -1,15 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="30.0" style="-fx-background-color: #1a1a1a; -fx-padding: 50;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.TYPERUSH.TutorLevelController">
-    <Label style="-fx-text-fill: white; -fx-font-size: 40px; -fx-font-weight: bold;" text="SELECT DIFFICULTY" />
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.GaussianBlur?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-    <VBox alignment="CENTER" spacing="15.0">
-        <Button onAction="#setBeginner" prefWidth="300.0" styleClass="btn-premium" text="BEGINNER" style="-fx-font-size: 20px;"/>
-        <Button onAction="#setIntermediate" prefWidth="300.0" styleClass="btn-premium" text="INTERMEDIATE" style="-fx-font-size: 20px;"/>
-        <Button onAction="#setPro" prefWidth="300.0" styleClass="btn-premium" text="PRO" style="-fx-font-size: 20px;"/>
-    </VBox>
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #0D1117;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.TYPERUSH.TutorLevelController">
+    <children>
 
-    <Button onAction="#backToMenu" styleClass="btn-backtomenu" text="BACK TO MENU" />
-</VBox>
+        <!-- Background Glows (Same as Menu) -->
+        <StackPane layoutX="800.0" layoutY="-100.0" prefHeight="500.0" prefWidth="500.0" style="-fx-background-color: #00E5FF; -fx-background-radius: 500; -fx-opacity: 0.12;">
+            <effect>
+                <GaussianBlur radius="120.0" />
+            </effect>
+        </StackPane>
+
+        <StackPane layoutX="-150.0" layoutY="400.0" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: #0066FF; -fx-background-radius: 500; -fx-opacity: 0.12;">
+            <effect>
+                <GaussianBlur radius="120.0" />
+            </effect>
+        </StackPane>
+
+        <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+
+                <!-- Left Content: Title -->
+                <VBox alignment="CENTER_LEFT" prefWidth="640.0" spacing="5.0" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets left="120.0" />
+                    </padding>
+                    <children>
+                        <Label text="TypeTutor" textFill="#ffffff">
+                            <font>
+                                <Font name="System Bold" size="80.0" />
+                            </font>
+                        </Label>
+
+                        <StackPane alignment="CENTER_LEFT" prefHeight="4.0" prefWidth="100.0" style="-fx-background-color: #00E5FF; -fx-max-width: 80;">
+                            <VBox.margin>
+                                <Insets bottom="20.0" top="5.0" />
+                            </VBox.margin>
+                            <effect>
+                                <DropShadow color="#00e5ff" radius="10.0" spread="0.5" />
+                            </effect>
+                        </StackPane>
+
+                        <Label text="Choose your" textFill="#8b949e">
+                            <font>
+                                <Font name="System" size="32.0" />
+                            </font>
+                        </Label>
+
+                        <Label text="tutorial" textFill="#8b949e">
+                            <font>
+                                <Font name="System" size="32.0" />
+                            </font>
+                        </Label>
+
+                        <Label text="Difficulty." textFill="#00e5ff">
+                            <font>
+                                <Font name="System Bold" size="40.0" />
+                            </font>
+                            <effect>
+                                <DropShadow color="#00e5ff40" radius="15.0" spread="0.1" />
+                            </effect>
+                        </Label>
+                    </children>
+                </VBox>
+
+                <!-- Right Content: Level Selection Buttons -->
+                <VBox alignment="CENTER" prefWidth="640.0" spacing="30.0" HBox.hgrow="ALWAYS">
+                    <children>
+
+                        <Button mnemonicParsing="false" onAction="#setBeginner" prefHeight="70.0" prefWidth="350.0" style="-fx-background-color: transparent; -fx-border-color: #00E5FF; -fx-border-width: 2; -fx-border-radius: 8; -fx-text-fill: #00E5FF; -fx-cursor: hand;" text="BEGINNER">
+                            <font>
+                                <Font name="System Bold" size="20.0" />
+                            </font>
+                            <effect>
+                                <DropShadow color="#00e5ff30" offsetY="5.0" radius="15.0" />
+                            </effect>
+                        </Button>
+
+                        <Button mnemonicParsing="false" onAction="#setIntermediate" prefHeight="70.0" prefWidth="350.0" style="-fx-background-color: transparent; -fx-border-color: #444c56; -fx-border-width: 2; -fx-border-radius: 8; -fx-text-fill: #c9d1d9; -fx-cursor: hand;" text="INTERMEDIATE">
+                            <font>
+                                <Font name="System Bold" size="20.0" />
+                            </font>
+                        </Button>
+
+                        <Button mnemonicParsing="false" onAction="#setPro" prefHeight="70.0" prefWidth="350.0" style="-fx-background-color: transparent; -fx-border-color: #00E5FF; -fx-border-width: 2; -fx-border-radius: 8; -fx-text-fill: #00E5FF; -fx-cursor: hand;" text="PRO MODE">
+                            <font>
+                                <Font name="System Bold" size="20.0" />
+                            </font>
+                            <effect>
+                                <DropShadow color="#00e5ff30" offsetY="5.0" radius="15.0" />
+                            </effect>
+                        </Button>
+
+                        <Button mnemonicParsing="false" onAction="#back" prefHeight="50.0" prefWidth="350.0" style="-fx-background-color: transparent; -fx-text-fill: #8b949e; -fx-cursor: hand;" text="← BACK TO MENU">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets top="20.0" />
+                            </VBox.margin>
+                        </Button>
+
+                    </children>
+                </VBox>
+
+            </children>
+        </HBox>
+    </children>
+</AnchorPane>

@@ -23,11 +23,11 @@ public class TutorLevelController extends BaseController {
     }
 
     @FXML
-    protected void backToMenu() {
-        switchScene("menu-view.fxml", "Main Menu");
+    protected void back() {
+        switchScene("menu-view.fxml", "TypeRush - Main Menu");
     }
 
     private void startTutor() {
-        switchScene("game-view.fxml", "TypeRush Tutor");
+        switchScene("game-view.fxml", "TypeRush - Typing Session");
     }
 }

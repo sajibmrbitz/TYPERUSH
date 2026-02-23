@@ -10,10 +10,13 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #0D1117;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.TYPERUSH.MenuController">
     <children>
 
+        <!-- Background Glows -->
         <StackPane layoutX="800.0" layoutY="-100.0" prefHeight="500.0" prefWidth="500.0" style="-fx-background-color: #00E5FF; -fx-background-radius: 500; -fx-opacity: 0.12;">
             <effect>
                 <GaussianBlur radius="120.0" />
@@ -26,15 +29,17 @@
             </effect>
         </StackPane>
 
+        <!-- Main Layout -->
         <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
 
+                <!-- Left Content -->
                 <VBox alignment="CENTER_LEFT" prefWidth="640.0" spacing="5.0" HBox.hgrow="ALWAYS">
                     <padding>
                         <Insets left="120.0" />
                     </padding>
                     <children>
-                        <Label text="TypeRush." textFill="#ffffff">
+                        <Label text="TypeRush" textFill="#ffffff">
                             <font>
                                 <Font name="System Bold" size="80.0" />
                             </font>
@@ -55,13 +60,13 @@
                             </font>
                         </Label>
 
-                        <Label text="next generation" textFill="#8b949e">
+                        <Label text="next generation of" textFill="#8b949e">
                             <font>
                                 <Font name="System" size="32.0" />
                             </font>
                         </Label>
 
-                        <Label text="of Racing." textFill="#00e5ff">
+                        <Label text="RACING." textFill="#00e5ff">
                             <font>
                                 <Font name="System Bold" size="40.0" />
                             </font>
@@ -72,6 +77,7 @@
                     </children>
                 </VBox>
 
+                <!-- Right Content (Buttons) -->
                 <VBox alignment="CENTER" prefWidth="640.0" spacing="35.0" HBox.hgrow="ALWAYS">
                     <children>
 
@@ -89,16 +95,72 @@
                                 <Font name="System Bold" size="22.0" />
                             </font>
                         </Button>
-                  <Button mnemonicParsing="false" onAction="#history_part" prefHeight="39.0" prefWidth="319.0" style="-fx-background-color: transparent; -fx-border-color: #00E5FF; -fx-border-width: 2; -fx-text-fill: #00E5FF; -fx-cursor: hand; -fx-padding: 10 20; -fx-border-radius: 8;" text="TYPE HISTORY">
-                     <font>
-                        <Font name="System Bold" size="22.0" />
-                     </font>
-                  </Button>
+
+                        <Button mnemonicParsing="false" onAction="#history_part" prefHeight="39.0" prefWidth="319.0" style="-fx-background-color: transparent; -fx-border-color: #00E5FF; -fx-border-width: 2; -fx-text-fill: #00E5FF; -fx-cursor: hand; -fx-padding: 10 20; -fx-border-radius: 8;" text="TYPE HISTORY">
+                            <font>
+                                <Font name="System Bold" size="22.0" />
+                            </font>
+                        </Button>
 
                     </children>
                 </VBox>
 
             </children>
         </HBox>
+
+        <!-- Tribute Section (Pinned to Bottom Left) -->
+        <VBox spacing="2.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="120.0">
+            <children>
+                <TextFlow>
+                    <children>
+                        <Text fill="#8b949e" text="Inspired from: " strokeType="OUTSIDE" strokeWidth="0.0">
+                            <font>
+                                <Font size="13.0" />
+                            </font>
+                        </Text>
+                        <Text fill="#00e5ff" text="TypeRacer" strokeType="OUTSIDE" strokeWidth="0.0">
+                            <font>
+                                <Font name="System Bold" size="13.0" />
+                            </font>
+                        </Text>
+                        <Text fill="#8b949e" text=" and " strokeType="OUTSIDE" strokeWidth="0.0">
+                            <font>
+                                <Font size="13.0" />
+                            </font>
+                        </Text>
+                        <Text fill="#00e5ff" text="EdClub" strokeType="OUTSIDE" strokeWidth="0.0">
+                            <font>
+                                <Font name="System Bold" size="13.0" />
+                            </font>
+                        </Text>
+                    </children>
+                </TextFlow>
+                <TextFlow>
+                    <children>
+                        <Text fill="#8b949e" text="Resources: " strokeType="OUTSIDE" strokeWidth="0.0">
+                            <font>
+                                <Font size="13.0" />
+                            </font>
+                        </Text>
+                        <Text fill="#00e5ff" text="EdClub , " strokeType="OUTSIDE" strokeWidth="0.0">
+                            <font>
+                                <Font name="System Bold" size="13.0" />
+                            </font>
+                        </Text>
+                        <Text fill="#00e5ff" text="Wikipedia" strokeType="OUTSIDE" strokeWidth="0.0">
+                            <font>
+                                <Font name="System Bold" size="13.0" />
+                            </font>
+                        </Text>
+                        <Text fill="#8b949e" text="." strokeType="OUTSIDE" strokeWidth="0.0">
+                            <font>
+                                <Font size="13.0" />
+                            </font>
+                        </Text>
+                    </children>
+                </TextFlow>
+            </children>
+        </VBox>
+
     </children>
 </AnchorPane>
