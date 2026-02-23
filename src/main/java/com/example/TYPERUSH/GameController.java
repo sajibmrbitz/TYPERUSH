@@ -8,14 +8,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.text.TextFlow;
 import java.io.InputStream;
 import java.util.Random;
-
+import javafx.scene.media.AudioClip;
 public class GameController extends BaseController {
     @FXML private Label wpmLabel, accuracyLabel, levelLabel;
     @FXML private TextFlow targetTextFlow;
     @FXML private TextField inputField;
     @FXML private StackPane carContainer;
     @FXML private ImageView handGuideView;
-
+private AudioClip typingSound;
     private String[] paragraphBank = {
             "Consistency is the foundation of improvement in any skill. Typing regularly helps build speed, accuracy, and confidence. Small daily efforts often produce better results than occasional intense practice.",
             "Developing a smooth typing rhythm reduces mental strain and increases focus. When your fingers move naturally across the keyboard, ideas flow more freely. Balance is the secret to lasting progress.",
@@ -27,7 +27,18 @@ public class GameController extends BaseController {
     private int totalKeyStrokes = 0, correctKeyStrokes = 0, wpm = 0, accuracy = 100, wordCount = 0;
     private boolean isRunning = false, isRaceFinished = false;
 
-    @FXML public void initialize() { resetGame(); }
+    @FXML public void initialize() {
+        try {
+            java.net.URL soundUrl = getClass().getResource("sounds/single_strock.mp3");
+            if (soundUrl != null) {
+                typingSound = new AudioClip(soundUrl.toString());
+            } else {
+                System.out.println("Could not find the sound file!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        resetGame(); }
 
     public void resetGame() {
         totalKeyStrokes = 0; correctKeyStrokes = 0;
@@ -69,8 +80,9 @@ public class GameController extends BaseController {
         }
 
         if (!isRunning) { startTime = System.currentTimeMillis(); isRunning = true; }
-        totalKeyStrokes++;
 
+ //   if(typingSound!=null ){typingSound.play();}
+        totalKeyStrokes++;
         // --- Highlighting & Correct Count Logic ---
         int currentCorrectInInput = 0;
         for (int i = 0; i < targetTextFlow.getChildren().size(); i++) {

@@ -11,6 +11,6 @@ public class MenuController extends BaseController {
     protected  void racing_part(){
         switchScene("game-view.fxml","TypeRush-Racing");
     }
-
-
+    @FXML
+    protected  void history_part(){switchScene("profile-view.fxml","Type history");}
 }
