@@ -9,17 +9,39 @@ import javafx.scene.text.TextFlow;
 import java.io.InputStream;
 import java.util.Random;
 import javafx.scene.media.AudioClip;
+
 public class GameController extends BaseController {
     @FXML private Label wpmLabel, accuracyLabel, levelLabel;
     @FXML private TextFlow targetTextFlow;
     @FXML private TextField inputField;
     @FXML private StackPane carContainer;
     @FXML private ImageView handGuideView;
-private AudioClip typingSound;
-    private String[] paragraphBank = {
-            "Consistency is the foundation of improvement in any skill. Typing regularly helps build speed, accuracy, and confidence. Small daily efforts often produce better results than occasional intense practice.",
-            "Developing a smooth typing rhythm reduces mental strain and increases focus. When your fingers move naturally across the keyboard, ideas flow more freely. Balance is the secret to lasting progress.",
-            "A hare once mocked a slow-moving tortoise for his steady pace. Tired of the teasing, the tortoise challenged the hare to a race. In the end, slow and steady effort won the race."
+
+    private static String selectedDifficulty = "NORMAL"; // Default
+
+    // 15 Paragraphs (5 for each level)
+    private final String[] beginnerBank = {
+            "asdf jkl; asdf jkl; a s d f j k l semicolon all day long typing is fun and easy for everyone start now",
+            "the cat sat on the mat and the dog ran to the park for a ball to play with my friend today",
+            "red blue green yellow black white orange purple pink brown grey silver gold clear bright dark light sun moon",
+            "home row keys are the best way to start learning how to type fast without looking at the keys now",
+            "keep your back straight and your feet on the floor while you type these simple words over and over again"
+    };
+
+    private final String[] intermediateBank = {
+            "The quick brown fox jumps over the lazy dog. Typing with capital letters and periods is a step up from beginner.",
+            "Consistency is the foundation of improvement in any skill. Typing regularly helps build speed, accuracy, and confidence. Practice daily.",
+            "Developing a smooth typing rhythm reduces mental strain and increases focus. When your fingers move naturally, ideas flow freely and clearly.",
+            "A hare once mocked a slow-moving tortoise for his steady pace. The tortoise challenged the hare to a race. Slow and steady wins.",
+            "Coding in Java requires attention to detail. Semicolons and curly braces are essential for your program to run correctly and efficiently."
+    };
+
+    private final String[] proBank = {
+            "Complex algorithms (like O(log n)) require precise typing. Don't forget: 'Single Quotes' and \"Double Quotes\" are different in most languages!",
+            "Hyper-threading technology (HTT) is used to improve parallelization of computations performed on x86 microprocessors. It is very technical stuff.",
+            "User-defined functions {int main()} must be declared properly. Errors like NullPointerException or StackOverflowError can be very frustrating for developers.",
+            "The 19th century was a period of rapid industrialization. Steam engines (Watt's design) changed the world forever; 100% true story!",
+            "Can you type @#% symbols quickly? Professional typists reach 120+ WPM while maintaining 99% accuracy on technical documentation and logs."
     };
 
     private String currentText;
@@ -27,18 +49,15 @@ private AudioClip typingSound;
     private int totalKeyStrokes = 0, correctKeyStrokes = 0, wpm = 0, accuracy = 100, wordCount = 0;
     private boolean isRunning = false, isRaceFinished = false;
 
+    // Static method to set difficulty from Menu or Level Selector
+    public static void setDifficulty(String diff) {
+        selectedDifficulty = diff;
+    }
+
     @FXML public void initialize() {
-        try {
-            java.net.URL soundUrl = getClass().getResource("sounds/single_strock.mp3");
-            if (soundUrl != null) {
-                typingSound = new AudioClip(soundUrl.toString());
-            } else {
-                System.out.println("Could not find the sound file!");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        resetGame(); }
+        levelLabel.setText("Level: " + selectedDifficulty);
+        resetGame();
+    }
 
     public void resetGame() {
         totalKeyStrokes = 0; correctKeyStrokes = 0;
@@ -47,7 +66,15 @@ private AudioClip typingSound;
         inputField.setStyle("-fx-border-color: #333;");
 
         Random rand = new Random();
-        currentText = paragraphBank[rand.nextInt(3)];
+        String[] bank;
+        switch (selectedDifficulty) {
+            case "BEGINNER" -> bank = beginnerBank;
+            case "INTERMEDIATE" -> bank = intermediateBank;
+            case "PRO" -> bank = proBank;
+            default -> bank = intermediateBank;
+        }
+
+        currentText = bank[rand.nextInt(5)];
 
         targetTextFlow.getChildren().clear();
         for (int i = 0; i < currentText.length(); i++) {
@@ -56,12 +83,7 @@ private AudioClip typingSound;
             targetTextFlow.getChildren().add(charLabel);
         }
 
-        int spaceCount = 0;
-        for (int i = 0; i < currentText.length(); i++) {
-            if (currentText.charAt(i) == ' ') spaceCount++;
-        }
-        wordCount = spaceCount + 1;
-
+        wordCount = currentText.split("\\s+").length;
         carContainer.setLayoutX(40);
         wpmLabel.setText("WPM: 0");
         accuracyLabel.setText("Accuracy: 100%");
@@ -81,19 +103,15 @@ private AudioClip typingSound;
 
         if (!isRunning) { startTime = System.currentTimeMillis(); isRunning = true; }
 
- //   if(typingSound!=null ){typingSound.play();}
         totalKeyStrokes++;
-        // --- Highlighting & Correct Count Logic ---
         int currentCorrectInInput = 0;
         for (int i = 0; i < targetTextFlow.getChildren().size(); i++) {
             Label l = (Label) targetTextFlow.getChildren().get(i);
             if (i < inputLength) {
                 if (input.charAt(i) == currentText.charAt(i)) {
-                    // Correct character
                     l.setStyle("-fx-background-color: rgba(46, 204, 113, 0.3); -fx-text-fill: white; -fx-font-size: 24px; -fx-font-family: 'Courier New';");
                     currentCorrectInInput++;
                 } else {
-                    // Wrong character
                     l.setStyle("-fx-background-color: rgba(255, 71, 87, 0.4); -fx-text-fill: white; -fx-font-size: 24px; -fx-font-family: 'Courier New';");
                 }
             } else {
@@ -101,19 +119,15 @@ private AudioClip typingSound;
             }
         }
 
-        // --- Updated Car Movement Logic ---
-        // গাড়ি এখন আগাবে ইনপুটের ভেতর যতগুলো সঠিক অক্ষর আছে তার ওপর ভিত্তি করে
         correctKeyStrokes = currentCorrectInInput;
         double ratio = (double) correctKeyStrokes / currentText.length();
         carContainer.setLayoutX(40.0 + (ratio * 1000.0));
 
-        // Update Stats & Hand Guide
         updateStats(inputLength);
         if (inputLength < currentText.length()) {
             updateHandGuide(currentText.charAt(inputLength));
         }
 
-        // Finish Logic
         if (inputLength >= currentText.length()) {
             isRunning = false;
             isRaceFinished = true;
@@ -143,9 +157,7 @@ private AudioClip typingSound;
     private void updateStats(int charLength) {
         long elapsed = System.currentTimeMillis() - startTime;
         if (elapsed > 0) {
-            // WPM is based on total characters typed correctly
             wpm = (int) ((correctKeyStrokes / 5.0) / ((elapsed / 1000.0) / 60.0));
-            // Accuracy is (Correct characters in current input) / (Total keys pressed)
             accuracy = (int) (((double) correctKeyStrokes / totalKeyStrokes) * 100);
             wpmLabel.setText("WPM: " + wpm);
             accuracyLabel.setText("Accuracy: " + (accuracy > 100 ? 100 : accuracy) + "%");

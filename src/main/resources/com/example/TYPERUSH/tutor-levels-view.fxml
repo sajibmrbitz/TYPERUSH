@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="30.0" style="-fx-background-color: #1a1a1a; -fx-padding: 50;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.TYPERUSH.TutorLevelController">
+    <Label style="-fx-text-fill: white; -fx-font-size: 40px; -fx-font-weight: bold;" text="SELECT DIFFICULTY" />
+
+    <VBox alignment="CENTER" spacing="15.0">
+        <Button onAction="#setBeginner" prefWidth="300.0" styleClass="btn-premium" text="BEGINNER" style="-fx-font-size: 20px;"/>
+        <Button onAction="#setIntermediate" prefWidth="300.0" styleClass="btn-premium" text="INTERMEDIATE" style="-fx-font-size: 20px;"/>
+        <Button onAction="#setPro" prefWidth="300.0" styleClass="btn-premium" text="PRO" style="-fx-font-size: 20px;"/>
+    </VBox>
+
+    <Button onAction="#backToMenu" styleClass="btn-backtomenu" text="BACK TO MENU" />
+</VBox>
