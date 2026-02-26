@@ -40,3 +40,15 @@
     -fx-letter-spacing: 8px; /* Wide spacing looks very modern */
     -fx-font-weight: bold;
 }
+.login-title{
+-fx-text-fill: #FFD700;
+}
+.axis-label{
+-fx-text-fill: #FFD700;
+}
+.axis-tick-mark-text {
+    -fx-fill:#FFD700;
+}
+.chart-title{
+-fx-text-fill: #FFD700;
+}
