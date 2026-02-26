@@ -60,7 +60,7 @@ public class ProfileController extends BaseController {
         series.setName("Accuracy over time");
 
         // Loop through the data to populate the chart
-        int raceNumber = 1;
+        int raceNumber = 1; //counting race number
         for (RaceResult result : data) {
             // X-axis: "1", "2", "3" (Keeps the axis clean compared to long date strings)
             // Y-axis: The accuracy integer
