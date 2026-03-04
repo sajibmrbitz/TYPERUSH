@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane fx:id="rootPane" styleClass="login-root" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.TYPERUSH.IntroController">
+    <children>
+        <VBox alignment="CENTER" spacing="15.0" pickOnBounds="false">
+            <children>
+                <Label styleClass="intro-title" text="TYPERUSH" />
+                <Label styleClass="intro-subtitle" text="MASTER THE ART OF RACE." />
+
+                <Label fx:id="promptLabel" styleClass="intro-prompt" text="PRESS ANY KEY TO START" translateY="60.0" />
+            </children>
+        </VBox>
+
+    </children>
+</StackPane>
