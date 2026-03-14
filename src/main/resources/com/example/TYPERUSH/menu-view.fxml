@@ -15,7 +15,6 @@
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #0D1117;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.TYPERUSH.MenuController">
     <children>
 
-        <!-- Background Glows -->
         <StackPane layoutX="800.0" layoutY="-100.0" prefHeight="500.0" prefWidth="500.0" style="-fx-background-color: #00E5FF; -fx-background-radius: 500; -fx-opacity: 0.12;">
             <effect>
                 <GaussianBlur radius="120.0" />
@@ -28,11 +27,9 @@
             </effect>
         </StackPane>
 
-        <!-- Main Layout -->
         <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
 
-                <!-- Left Content -->
                 <VBox alignment="CENTER_LEFT" prefWidth="640.0" spacing="5.0" HBox.hgrow="ALWAYS">
                     <padding>
                         <Insets left="120.0" />
@@ -76,7 +73,6 @@
                     </children>
                 </VBox>
 
-                <!-- Right Content (Buttons) -->
                 <VBox alignment="CENTER" prefWidth="640.0" spacing="35.0" HBox.hgrow="ALWAYS">
                     <children>
 
@@ -101,13 +97,21 @@
                             </font>
                         </Button>
 
+                        <Button mnemonicParsing="false" onAction="#multiplayer_part" prefHeight="70.0" prefWidth="320.0" style="-fx-background-color: transparent; -fx-border-color: #e2b714; -fx-border-width: 2; -fx-border-radius: 8; -fx-text-fill: #e2b714; -fx-cursor: hand; -fx-padding: 10 20;" text="MULTIPLAYER">
+                            <font>
+                                <Font name="System Bold" size="22.0" />
+                            </font>
+                            <effect>
+                                <DropShadow color="#e2b71430" offsetY="5.0" radius="15.0" />
+                            </effect>
+                        </Button>
+
                     </children>
                 </VBox>
 
             </children>
         </HBox>
 
-        <!-- Tribute Section (Pinned to Bottom Left) -->
         <VBox spacing="2.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="120.0">
             <children>
                 <TextFlow />

@@ -22,4 +22,8 @@ public class MenuController extends BaseController {
         // User history ba profile viewing
         switchScene("profile-view.fxml", "Type History");
     }
+    @FXML
+    protected void multiplayer_part() {
+        switchScene("multiplayer-setup-view.fxml", "TypeRush - Multiplayer Lobby");
+    }
 }

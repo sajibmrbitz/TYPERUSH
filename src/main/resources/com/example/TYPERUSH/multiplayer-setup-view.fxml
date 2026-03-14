@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.GaussianBlur?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #0D1117;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.TYPERUSH.MultiplayerController">
+    <children>
+        <StackPane layoutX="800.0" layoutY="-100.0" prefHeight="500.0" prefWidth="500.0" style="-fx-background-color: #00E5FF; -fx-background-radius: 500; -fx-opacity: 0.12;">
+            <effect><GaussianBlur radius="120.0" /></effect>
+        </StackPane>
+        <StackPane layoutX="-150.0" layoutY="400.0" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: #0066FF; -fx-background-radius: 500; -fx-opacity: 0.12;">
+            <effect><GaussianBlur radius="120.0" /></effect>
+        </StackPane>
+
+        <VBox alignment="CENTER" spacing="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <VBox alignment="CENTER" spacing="10.0">
+                    <Label text="MULTIPLAYER LOBBY" textFill="#00e5ff">
+                        <font><Font name="System Bold" size="60.0" /></font>
+                        <effect><DropShadow color="#00e5ff40" radius="15.0" spread="0.1" /></effect>
+                    </Label>
+                    <Label fx:id="statusLabel" text="Loading IP..." textFill="#e2b714">
+                        <font><Font name="System Bold" size="24.0" /></font>
+                    </Label>
+                </VBox>
+
+                <HBox alignment="CENTER" spacing="80.0">
+                    <VBox alignment="CENTER" prefHeight="250.0" prefWidth="400.0" spacing="30.0" style="-fx-border-color: #00E5FF; -fx-border-width: 2; -fx-border-radius: 15; -fx-background-color: rgba(0, 229, 255, 0.05);">
+                        <Label text="CREATE MATCH" textFill="WHITE"><font><Font name="System Bold" size="28.0" /></font></Label>
+                        <Button mnemonicParsing="false" onAction="#onHostClicked" prefHeight="60.0" prefWidth="250.0" styleClass="btn-premium" text="HOST GAME" />
+                    </VBox>
+
+                    <VBox alignment="CENTER" prefHeight="250.0" prefWidth="400.0" spacing="20.0" style="-fx-border-color: #e2b714; -fx-border-width: 2; -fx-border-radius: 15; -fx-background-color: rgba(226, 183, 20, 0.05);">
+                        <Label text="JOIN MATCH" textFill="WHITE"><font><Font name="System Bold" size="28.0" /></font></Label>
+                        <TextField fx:id="ipInputField" alignment="CENTER" maxWidth="300.0" prefHeight="50.0" promptText="Enter Host IP Address" styleClass="typing-input" />
+                        <Button mnemonicParsing="false" onAction="#onJoinClicked" prefHeight="60.0" prefWidth="250.0" style="-fx-background-color: #e2b714; -fx-text-fill: black; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-weight: bold;" text="JOIN GAME" />
+                    </VBox>
+                </HBox>
+
+                <Button mnemonicParsing="false" onAction="#backToMenu" prefHeight="50.0" prefWidth="200.0" styleClass="btn-backtomenu" text="← BACK TO MENU">
+                    <VBox.margin><Insets top="30.0" /></VBox.margin>
+                </Button>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
