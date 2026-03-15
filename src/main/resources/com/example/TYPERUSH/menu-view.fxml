@@ -76,7 +76,7 @@
                 <VBox alignment="CENTER" prefWidth="640.0" spacing="35.0" HBox.hgrow="ALWAYS">
                     <children>
 
-                        <Button mnemonicParsing="false" onAction="#racing_part" prefHeight="70.0" prefWidth="320.0" style="-fx-background-color: transparent; -fx-border-color: #00E5FF; -fx-border-width: 2; -fx-border-radius: 8; -fx-text-fill: #00E5FF; -fx-cursor: hand; -fx-padding: 10 20;" text="TYPE RACE">
+                        <Button mnemonicParsing="false" onAction="#multiplayer_part" prefHeight="70.0" prefWidth="320.0" style="-fx-background-color: transparent; -fx-border-color: #00E5FF; -fx-border-width: 2; -fx-border-radius: 8; -fx-text-fill: #00E5FF; -fx-cursor: hand; -fx-padding: 10 20;" text="TYPE RACE">
                             <font>
                                 <Font name="System Bold" size="22.0" />
                             </font>
@@ -97,14 +97,14 @@
                             </font>
                         </Button>
 
-                        <Button mnemonicParsing="false" onAction="#multiplayer_part" prefHeight="70.0" prefWidth="320.0" style="-fx-background-color: transparent; -fx-border-color: #e2b714; -fx-border-width: 2; -fx-border-radius: 8; -fx-text-fill: #e2b714; -fx-cursor: hand; -fx-padding: 10 20;" text="MULTIPLAYER">
-                            <font>
-                                <Font name="System Bold" size="22.0" />
-                            </font>
-                            <effect>
-                                <DropShadow color="#e2b71430" offsetY="5.0" radius="15.0" />
-                            </effect>
-                        </Button>
+<!--                        <Button mnemonicParsing="false" onAction="#multiplayer_part" prefHeight="70.0" prefWidth="320.0" style="-fx-background-color: transparent; -fx-border-color: #e2b714; -fx-border-width: 2; -fx-border-radius: 8; -fx-text-fill: #e2b714; -fx-cursor: hand; -fx-padding: 10 20;" text="MULTIPLAYER">-->
+<!--                            <font>-->
+<!--                                <Font name="System Bold" size="22.0" />-->
+<!--                            </font>-->
+<!--                            <effect>-->
+<!--                                <DropShadow color="#e2b71430" offsetY="5.0" radius="15.0" />-->
+<!--                            </effect>-->
+<!--                        </Button>-->
 
                     </children>
                 </VBox>

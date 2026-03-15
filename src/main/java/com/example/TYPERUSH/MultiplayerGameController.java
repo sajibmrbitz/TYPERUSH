@@ -2,7 +2,6 @@ package com.example.TYPERUSH;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
@@ -12,18 +11,25 @@ public class MultiplayerGameController extends BaseController implements Progres
 
     @FXML private StackPane myCarContainer, opponentCarContainer;
     @FXML private Label wpmLabel, accuracyLabel, opponentStatusLabel, opponentWpmLabel, opponentAccLabel;
+    @FXML private Label myNameLabel;
     @FXML private TextFlow targetTextFlow;
     @FXML private TextField inputField;
+
+    // overlay
+    @FXML private StackPane resultOverlay;
+    @FXML private Label resultIcon, resultTitle, resultMessage, resultWpm, resultAcc;
 
     private String currentText = "";
     private boolean isRaceFinished = false;
     private boolean isRunning = false;
     private long startTime;
     private int totalKeyStrokes = 0, correctKeyStrokes = 0;
+    private int lastWpm = 0, lastAcc = 100;
 
     @FXML
     public void initialize() {
         inputField.setEditable(false);
+        myNameLabel.setText(GameSession.localPlayerName);
 
         if (GameSession.isHost) {
             opponentStatusLabel.setText("Waiting for opponent to join...");
@@ -63,7 +69,6 @@ public class MultiplayerGameController extends BaseController implements Progres
 
         for (int i = 0; i < targetTextFlow.getChildren().size(); i++) {
             Label l = (Label) targetTextFlow.getChildren().get(i);
-
             if (i < inputLength) {
                 if (!hasError && input.charAt(i) == currentText.charAt(i)) {
                     l.setStyle("-fx-background-color: rgba(46, 204, 113, 0.3); -fx-text-fill: white; -fx-font-size: 24px; -fx-font-family: 'Courier New';");
@@ -81,22 +86,21 @@ public class MultiplayerGameController extends BaseController implements Progres
         double myRatio = (double) correctKeyStrokes / currentText.length();
         myCarContainer.setLayoutX(40.0 + (myRatio * 1000.0));
 
-        int myWpm = 0; int myAcc = 100;
         long elapsed = System.currentTimeMillis() - startTime;
         if (elapsed > 0) {
-            myWpm = (int) ((correctKeyStrokes / 5.0) / ((elapsed / 1000.0) / 60.0));
-            myAcc = (int) (((double) correctKeyStrokes / totalKeyStrokes) * 100);
-            wpmLabel.setText("WPM: " + myWpm);
-            accuracyLabel.setText("Accuracy: " + (myAcc > 100 ? 100 : myAcc) + "%");
+            lastWpm = (int) ((correctKeyStrokes / 5.0) / ((elapsed / 1000.0) / 60.0));
+            lastAcc = (int) (((double) correctKeyStrokes / totalKeyStrokes) * 100);
+            wpmLabel.setText("WPM: " + lastWpm);
+            accuracyLabel.setText("Accuracy: " + (lastAcc > 100 ? 100 : lastAcc) + "%");
         }
 
-        GameSession.sendStats(myRatio, myWpm, myAcc);
+        GameSession.sendStats(myRatio, lastWpm, lastAcc);
 
         if (prefixMatch == currentText.length()) {
             if (!isRaceFinished) {
                 isRaceFinished = true;
                 GameSession.sendFinish();
-                showWinScreen(true);
+                showResultOverlay(true);
             }
         }
     }
@@ -105,7 +109,7 @@ public class MultiplayerGameController extends BaseController implements Progres
     public void onParagraphReceived(String para) {
         Platform.runLater(() -> {
             currentText = para;
-            opponentStatusLabel.setText("Opponent: " + GameSession.opponentName);
+            opponentStatusLabel.setText(GameSession.opponentName);
             opponentStatusLabel.setStyle("-fx-text-fill: #e2b714;");
             inputField.setEditable(true);
 
@@ -132,26 +136,24 @@ public class MultiplayerGameController extends BaseController implements Progres
         Platform.runLater(() -> {
             if (!isRaceFinished) {
                 isRaceFinished = true;
-                showWinScreen(false);
+                showResultOverlay(false);
             }
         });
     }
 
-    // --- NEW: Handle Opponent Leaving cleanly ---
     @Override
     public void onOpponentLeft() {
         Platform.runLater(() -> {
             if (!isRaceFinished) {
-                // If they leave in the middle of a race, alert us before kicking us out!
                 isRaceFinished = true;
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Match Ended");
-                alert.setHeaderText(null);
-                alert.setContentText("The opponent has left the match.");
-                alert.showAndWait();
-
+                resultIcon.setText("🚪");
+                resultTitle.setText("OPPONENT LEFT");
+                resultTitle.setStyle("-fx-font-size: 52px; -fx-font-weight: bold; -fx-text-fill: #ff4757;");
+                resultMessage.setText(GameSession.opponentName + " has left the match.");
+                resultWpm.setText("-");
+                resultAcc.setText("-");
+                resultOverlay.setVisible(true);
                 GameSession.disconnect();
-                switchScene("menu-view.fxml", "TypeRush - Menu");
             }
         });
     }
@@ -159,36 +161,37 @@ public class MultiplayerGameController extends BaseController implements Progres
     @Override
     public void onError(String message) {
         Platform.runLater(() -> {
-            if (!isRaceFinished) { // Mask the error from crashing JavaFX if we are just looking at the win screen!
+            if (!isRaceFinished) {
                 opponentStatusLabel.setText("Error: " + message);
             }
         });
     }
 
-    private void showWinScreen(boolean iWon) {
+    private void showResultOverlay(boolean iWon) {
         inputField.setEditable(false);
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Race Finished!");
-        alert.setHeaderText(null);
-
         if (iWon) {
-            alert.setContentText("🏆 YOU WON THE RACE!");
+            resultIcon.setText("🏆");
+            resultTitle.setText("YOU WON!");
+            resultTitle.setStyle("-fx-font-size: 52px; -fx-font-weight: bold; -fx-text-fill: #00E5FF;");
+            resultMessage.setText("Congratulations " + GameSession.localPlayerName + "! You finished first!");
         } else {
-            alert.setContentText("❌ OPPONENT WON!");
+            resultIcon.setText("❌");
+            resultTitle.setText("YOU LOST!");
+            resultTitle.setStyle("-fx-font-size: 52px; -fx-font-weight: bold; -fx-text-fill: #E2B714;");
+            resultMessage.setText(GameSession.opponentName + " finished first. Better luck next time!");
         }
 
-        alert.showAndWait();
-        leaveMatch();
+        resultWpm.setText(String.valueOf(lastWpm));
+        resultAcc.setText((lastAcc > 100 ? 100 : lastAcc) + "%");
+        resultOverlay.setVisible(true);
     }
 
-    // --- UPDATED: Safely leave and trigger the opponent to leave too ---
     @FXML
     protected void leaveMatch() {
         isRaceFinished = true;
-        GameSession.sendLeave(); // Tell opponent we are exiting
+        GameSession.sendLeave();
 
-        // Wait 100ms on a background thread to ensure the network message sends before deleting the socket
         new Thread(() -> {
             try { Thread.sleep(100); } catch (InterruptedException e) {}
             Platform.runLater(() -> {

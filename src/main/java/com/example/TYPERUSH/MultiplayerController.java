@@ -8,13 +8,14 @@ import java.net.InetAddress;
 public class MultiplayerController extends BaseController {
 
     @FXML private TextField ipInputField;
+    @FXML private TextField nameField;   // ← NEW: name input field
     @FXML private Label statusLabel;
 
     @FXML
     public void initialize() {
         try {
             String myIP = InetAddress.getLocalHost().getHostAddress();
-            statusLabel.setText("Your IP Address: " + myIP);
+            statusLabel.setText(myIP);
         } catch (Exception e) {
             statusLabel.setText("Could not get IP");
         }
@@ -22,21 +23,33 @@ public class MultiplayerController extends BaseController {
 
     @FXML
     protected void onHostClicked() {
-        // I clicked Host, so I am the Server
+        String name = nameField.getText().trim();
+        if (name.isEmpty()) {
+            nameField.setPromptText("⚠ Enter your name first!");
+            return; // ← don't proceed if name is empty
+        }
+
         GameSession.isHost = true;
-        GameSession.localPlayerName = "Host Player";
+        GameSession.localPlayerName = name; // ← use typed name
         switchScene("multiplayer-game-view.fxml", "TypeRush - Hosting Game");
     }
 
     @FXML
     protected void onJoinClicked() {
+        String name = nameField.getText().trim();
         String friendIP = ipInputField.getText().trim();
-        if (friendIP.isEmpty()) return;
 
-        // I clicked Join, so I am the Client
+        if (name.isEmpty()) {
+            nameField.setPromptText("⚠ Enter your name first!");
+            return; // ← don't proceed if name is empty
+        }
+        if (friendIP.isEmpty()) {
+            return;
+        }
+
         GameSession.isHost = false;
         GameSession.joinIp = friendIP;
-        GameSession.localPlayerName = "Joiner Player";
+        GameSession.localPlayerName = name; // ← use typed name
         switchScene("multiplayer-game-view.fxml", "TypeRush - Joining Game");
     }
 
