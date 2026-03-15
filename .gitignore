@@ -43,3 +43,4 @@ target/
 .idea/
 
 .idea/
+*.dat
