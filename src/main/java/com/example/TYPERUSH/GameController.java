@@ -21,27 +21,26 @@ public class GameController extends BaseController {
 
     // 15 Paragraphs (5 for each level)
     private final String[] beginnerBank = {
-            "asdf jkl; asdf jkl; a s d f j k l semicolon all day long typing is fun and easy for everyone start now",
-            "the cat sat on the mat and the dog ran to the park for a ball to play with my friend today",
-            "red blue green yellow black white orange purple pink brown grey silver gold clear bright dark light sun moon",
-            "home row keys are the best way to start learning how to type fast without looking at the keys now",
-            "keep your back straight and your feet on the floor while you type these simple words over and over again"
+            "osman bin hadi is a young talent in our country who is known for his work in bangladesh today",
+            "july revolution in bangladesh showed the power of students and the unity of common people now",
+            "pilkhana tragedy was a very sad day for our nation and we remember the brave soldiers always",
+            "safe street movement in two thousand eighteen was started by students to make our roads better",
+            "academic pressure in buet is very high for every student and we have to study all day and night"
     };
-
     private final String[] intermediateBank = {
-            "The quick brown fox jumps over the lazy dog. Typing with capital letters and periods is a step up from beginner.",
-            "Consistency is the foundation of improvement in any skill. Typing regularly helps build speed, accuracy, and confidence. Practice daily.",
-            "Developing a smooth typing rhythm reduces mental strain and increases focus. When your fingers move naturally, ideas flow freely and clearly.",
-            "A hare once mocked a slow-moving tortoise for his steady pace. The tortoise challenged the hare to a race. Slow and steady wins.",
-            "Coding in Java requires attention to detail. Semicolons and curly braces are essential for your program to run correctly and efficiently."
+            "Myrtar Osman Bin Hadi is making a significant impact in BD through his dedicated social work and vision.",
+            "The July revolution in BD proved that when students stand together, they can change the entire history.",
+            "The Pilkhana tragedy of BDR remains one of the darkest chapters in our history, where many lives were lost.",
+            "In 2018, the Safe Street Movement taught us how school children can lead a nation towards better discipline.",
+            "Academic pressure of BUET is no joke; balancing lab reports and term finals is a constant struggle for us."
     };
 
     private final String[] proBank = {
-            "Complex algorithms (like O(log n)) require precise typing. Don't forget: 'Single Quotes' and \"Double Quotes\" are different in most languages!",
-            "Hyper-threading technology (HTT) is used to improve parallelization of computations performed on x86 microprocessors. It is very technical stuff.",
-            "User-defined functions {int main()} must be declared properly. Errors like NullPointerException or StackOverflowError can be very frustrating for developers.",
-            "The 19th century was a period of rapid industrialization. Steam engines (Watt's design) changed the world forever; 100% true story!",
-            "Can you type @#% symbols quickly? Professional typists reach 120+ WPM while maintaining 99% accuracy on technical documentation and logs."
+            "Osman Bin Hadi (a young visionary) is working 24/7 for BD; his efforts are 100% focused on social change!",
+            "The 'July Revolution' of 2024 was a massive shift; students faced 100% risks to ensure a new future for BD.",
+            "Pilkhana Tragedy (Feb 25, 2009) was a national crisis; we lost 57+ brave army officers in that dark event.",
+            "The 'Safe Street Movement' (2018) raised a 10/10 awareness about road safety and traffic laws in Dhaka city!",
+            "Life at BUET: 5 theory courses + 3 labs per week = 0% free time. The O(n!) complexity of exams is real!"
     };
 
     private String currentText;
