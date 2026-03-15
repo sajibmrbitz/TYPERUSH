@@ -25,9 +25,11 @@ public class MultiplayerGameController extends BaseController implements Progres
     private long startTime;
     private int totalKeyStrokes = 0, correctKeyStrokes = 0;
     private int lastWpm = 0, lastAcc = 100;
+    private int previousInputLength = 0;
 
     @FXML
     public void initialize() {
+        previousInputLength = 0;
         inputField.setEditable(false);
         myNameLabel.setText(GameSession.localPlayerName);
 
@@ -36,7 +38,8 @@ public class MultiplayerGameController extends BaseController implements Progres
             currentText = "The quick brown fox jumps over the lazy dog in a real time multiplayer race.";
             GameSession.server = new GameServer(currentText, this);
             GameSession.server.start();
-        } else {
+        }
+        else {
             opponentStatusLabel.setText("Connecting to host...");
             GameSession.client = new GameClient(GameSession.joinIp, this);
             GameSession.client.start();
@@ -56,6 +59,23 @@ public class MultiplayerGameController extends BaseController implements Progres
             input = inputField.getText();
             inputLength = input.length();
         }
+
+        if(inputLength == 0){
+            previousInputLength = 0;
+        }
+
+        if(inputLength > previousInputLength && inputLength <= currentText.length()){
+            char typedChar = input.charAt(inputLength - 1);
+            char targetChar = currentText.charAt(inputLength - 1);
+
+            if(typedChar == targetChar){
+                SoundManager.getInstance().playCorrect();
+            }
+            else{
+                SoundManager.getInstance().playWrong();
+            }
+        }
+        previousInputLength = inputLength;
 
         if (!isRunning && inputLength > 0) {
             startTime = System.currentTimeMillis();
@@ -100,6 +120,7 @@ public class MultiplayerGameController extends BaseController implements Progres
             if (!isRaceFinished) {
                 isRaceFinished = true;
                 GameSession.sendFinish();
+                SoundManager.getInstance().playFinish();
                 showResultOverlay(true);
             }
         }

@@ -47,6 +47,7 @@ public class GameController extends BaseController {
     private long startTime;
     private int totalKeyStrokes = 0, correctKeyStrokes = 0, wpm = 0, accuracy = 100, wordCount = 0;
     private boolean isRunning = false, isRaceFinished = false;
+    private int previousInputLength=0;
 
     // Static method to set difficulty from Menu or Level Selector
     public static void setDifficulty(String diff) {
@@ -59,7 +60,9 @@ public class GameController extends BaseController {
     }
 
     public void resetGame() {
-        totalKeyStrokes = 0; correctKeyStrokes = 0;
+        previousInputLength = 0;
+        totalKeyStrokes = 0;
+        correctKeyStrokes = 0;
         isRunning = false; isRaceFinished = false;
         inputField.clear(); inputField.setEditable(true);
         inputField.setStyle("-fx-border-color: #333;");
@@ -97,8 +100,22 @@ public class GameController extends BaseController {
         if (inputLength == 0) {
             resetHighlighting();
             updateHandGuide(currentText.charAt(0));
+            previousInputLength = 0;
             return;
         }
+
+        if(inputLength > previousInputLength && inputLength <= currentText.length()) {
+            char typedChar = input.charAt(inputLength -1);
+            char targetChar = currentText.charAt(inputLength-1);
+
+            if(typedChar == targetChar) {
+                SoundManager.getInstance().playCorrect();
+            }
+            else{
+                SoundManager.getInstance().playWrong();
+            }
+        }
+        previousInputLength=inputLength;
 
         if (!isRunning) { startTime = System.currentTimeMillis(); isRunning = true; }
 
@@ -131,6 +148,7 @@ public class GameController extends BaseController {
             isRunning = false;
             isRaceFinished = true;
             inputField.setEditable(false);
+            SoundManager.getInstance().playFinish();
             saveResult();
         }
     }
@@ -150,7 +168,9 @@ public class GameController extends BaseController {
             else if (nextChar == ',') ascii = 44;
             InputStream is = getClass().getResourceAsStream("hands/" + ascii + ".png");
             if (is != null) handGuideView.setImage(new Image(is));
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            // nothing
+        }
     }
 
     private void updateStats(int charLength) {
