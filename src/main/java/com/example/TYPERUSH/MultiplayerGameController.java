@@ -14,7 +14,7 @@ public class MultiplayerGameController extends BaseController implements Progres
     @FXML private Label myNameLabel;
     @FXML private TextFlow targetTextFlow;
     @FXML private TextField inputField;
-
+    @FXML private Label countdownLabel;
     // overlay
     @FXML private StackPane resultOverlay;
     @FXML private Label resultIcon, resultTitle, resultMessage, resultWpm, resultAcc;
@@ -132,7 +132,7 @@ public class MultiplayerGameController extends BaseController implements Progres
             currentText = para;
             opponentStatusLabel.setText(GameSession.opponentName);
             opponentStatusLabel.setStyle("-fx-text-fill: #e2b714;");
-            inputField.setEditable(true);
+            inputField.setEditable(false);
 
             targetTextFlow.getChildren().clear();
             for (int i = 0; i < currentText.length(); i++) {
@@ -185,6 +185,32 @@ public class MultiplayerGameController extends BaseController implements Progres
             if (!isRaceFinished) {
                 opponentStatusLabel.setText("Error: " + message);
             }
+        });
+    }
+    @Override
+    public void onCountdownStart() {
+        Platform.runLater(() -> {
+            countdownLabel.setVisible(true);
+            countdownLabel.setText("3");
+
+            new Thread(() -> {
+                try {
+                    Thread.sleep(1000);
+                    Platform.runLater(() -> countdownLabel.setText("2"));
+                    Thread.sleep(1000);
+                    Platform.runLater(() -> countdownLabel.setText("1"));
+                    Thread.sleep(1000);
+                    Platform.runLater(() -> {
+                        countdownLabel.setText("GO!");
+                        countdownLabel.setStyle("-fx-font-size: 90px; -fx-font-weight: bold; -fx-text-fill: #e2b714;");
+                    });
+                    Thread.sleep(1000);
+                    Platform.runLater(() -> {
+                        countdownLabel.setVisible(false);
+                        inputField.setEditable(true);
+                    });
+                } catch (InterruptedException e) {}
+            }).start();
         });
     }
 

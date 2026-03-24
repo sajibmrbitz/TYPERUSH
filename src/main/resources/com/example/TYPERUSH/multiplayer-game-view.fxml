@@ -51,7 +51,9 @@
         <TextFlow fx:id="targetTextFlow" maxWidth="1050" minHeight="120"
                   style="-fx-background-color: rgba(0,0,0,0.5); -fx-padding: 20; -fx-background-radius: 15;"
                   textAlignment="CENTER" />
-
+        <Label fx:id="countdownLabel" text=""
+               style="-fx-font-size: 90px; -fx-font-weight: bold; -fx-text-fill: #00E5FF;"
+               visible="false"/>
         <TextField fx:id="inputField" maxWidth="850.0"
                    onKeyReleased="#handleTyping"
                    prefHeight="60.0" styleClass="typing-input" />

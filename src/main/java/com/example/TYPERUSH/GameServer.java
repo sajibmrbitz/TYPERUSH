@@ -37,6 +37,8 @@ public class GameServer extends Thread {
             }
 
             listener.onParagraphReceived(paragraph);
+            out.println("COUNTDOWN:");
+            listener.onCountdownStart();
 
             String input;
             while (running && (input = in.readLine()) != null) {

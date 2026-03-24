@@ -31,7 +31,12 @@ public class GameClient extends Thread {
                     GameSession.opponentName = input.substring(5);
                 } else if (input.startsWith("PARA:")) {
                     listener.onParagraphReceived(input.substring(5));
-                } else if (input.startsWith("STATS:")) {
+
+                }
+                else if(input.startsWith("COUNTDOWN:")){
+                    listener.onCountdownStart();
+                }
+                else if (input.startsWith("STATS:")) {
                     String[] parts = input.substring(6).split(":");
                     double progress = Double.parseDouble(parts[0]);
                     int wpm = Integer.parseInt(parts[1]);
