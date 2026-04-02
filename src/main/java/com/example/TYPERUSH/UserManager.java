@@ -3,6 +3,9 @@ package com.example.TYPERUSH;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
 
 public class UserManager {
     // The single list that holds all your local results
@@ -43,5 +46,16 @@ public class UserManager {
     public static void addResult(RaceResult result) {
         localHistory.add(result);
         saveHistory();
+    }
+
+    public static List<RaceResult> getAllResults() {
+        return new ArrayList<>(localHistory);
+    }
+
+    public static List<RaceResult> getTodaysResults() {
+        String todayString = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        return localHistory.stream()
+                .filter(result -> result.getDateTime().startsWith(todayString))
+                .collect(Collectors.toList());
     }
 }

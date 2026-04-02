@@ -17,9 +17,9 @@ public class GameController extends BaseController {
     @FXML private StackPane carContainer;
     @FXML private ImageView handGuideView;
 
-    private static String selectedDifficulty = "NORMAL"; // Default
+    private static String selectedDifficulty = "NORMAL";
 
-    // 15 Paragraphs (5 for each level)
+
     private final String[] beginnerBank = {
             "osman bin hadi is a young talent in our country who is known for his work in bangladesh today",
             "july revolution in bangladesh showed the power of students and the unity of common people now",
@@ -49,7 +49,7 @@ public class GameController extends BaseController {
     private boolean isRunning = false, isRaceFinished = false;
     private int previousInputLength=0;
 
-    // Static method to set difficulty from Menu or Level Selector
+
     public static void setDifficulty(String diff) {
         selectedDifficulty = diff;
     }

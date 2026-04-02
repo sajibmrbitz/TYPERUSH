@@ -41,6 +41,9 @@ public class SoundManager {
         if(correctSound!=null){
             correctSound.setVolume(0.4);
             correctSound.play();
+
+
+
         }
     }
 

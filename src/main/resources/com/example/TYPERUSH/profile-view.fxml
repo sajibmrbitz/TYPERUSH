@@ -1,66 +1,136 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
+<ScrollPane fitToWidth="true" style="-fx-background-color: #111111;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.TYPERUSH.ProfileController">
+    <VBox alignment="CENTER" spacing="24.0" style="-fx-background-color: #111111; -fx-padding: 30;">
 
-<?import javafx.scene.control.Button?>
+        <!-- TITLE -->
+        <Label text="RACE HISTORY" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #00E5FF; -fx-font-family: 'Courier New';"/>
 
-<?import javafx.scene.control.Label?>
+        <!-- ALL TIME STATISTICS -->
+        <VBox spacing="10" maxWidth="1100">
+            <Label text="All Time Statistics" style="-fx-font-size: 16px; -fx-text-fill: #00E5FF; -fx-font-family: 'Courier New';"/>
+            <HBox spacing="12" alignment="CENTER_LEFT">
 
-<?import javafx.scene.control.TableColumn?>
+                <VBox alignment="CENTER" prefWidth="170" style="-fx-background-color: #1a1a1a; -fx-border-color: #00E5FF; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 14;">
+                    <Label text="Time:" style="-fx-text-fill: #888888; -fx-font-size: 13px;"/>
+                    <Label fx:id="allTimeTime" text="00:00:00" style="-fx-text-fill: #ffffff; -fx-font-size: 22px; -fx-font-weight: bold; -fx-font-family: 'Courier New';"/>
+                </VBox>
 
-<?import javafx.scene.control.TableView?>
+                <VBox alignment="CENTER" prefWidth="170" style="-fx-background-color: #1a1a1a; -fx-border-color: #00E5FF; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 14;">
+                    <Label text="Lessons:" style="-fx-text-fill: #888888; -fx-font-size: 13px;"/>
+                    <Label fx:id="allTimeLessons" text="0" style="-fx-text-fill: #ffffff; -fx-font-size: 22px; -fx-font-weight: bold; -fx-font-family: 'Courier New';"/>
+                </VBox>
 
-<?import javafx.scene.layout.HBox?>
+                <VBox alignment="CENTER" prefWidth="170" style="-fx-background-color: #1a1a1a; -fx-border-color: #00E5FF; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 14;">
+                    <Label text="Top speed:" style="-fx-text-fill: #888888; -fx-font-size: 13px;"/>
+                    <Label fx:id="allTimeTopSpeed" text="0wpm" style="-fx-text-fill: #ffffff; -fx-font-size: 22px; -fx-font-weight: bold; -fx-font-family: 'Courier New';"/>
+                </VBox>
 
-<?import javafx.scene.layout.VBox?>
+                <VBox alignment="CENTER" prefWidth="170" style="-fx-background-color: #1a1a1a; -fx-border-color: #00E5FF; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 14;">
+                    <Label text="Average speed:" style="-fx-text-fill: #888888; -fx-font-size: 13px;"/>
+                    <Label fx:id="allTimeAvgSpeed" text="0.0wpm" style="-fx-text-fill: #ffffff; -fx-font-size: 22px; -fx-font-weight: bold; -fx-font-family: 'Courier New';"/>
+                </VBox>
 
-<?import javafx.scene.layout.StackPane?>
+                <VBox alignment="CENTER" prefWidth="170" style="-fx-background-color: #1a1a1a; -fx-border-color: #00E5FF; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 14;">
+                    <Label text="Top accuracy:" style="-fx-text-fill: #888888; -fx-font-size: 13px;"/>
+                    <Label fx:id="allTimeTopAcc" text="0%" style="-fx-text-fill: #ffffff; -fx-font-size: 22px; -fx-font-weight: bold; -fx-font-family: 'Courier New';"/>
+                </VBox>
 
+                <VBox alignment="CENTER" prefWidth="170" style="-fx-background-color: #1a1a1a; -fx-border-color: #00E5FF; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 14;">
+                    <Label text="Average accuracy:" style="-fx-text-fill: #888888; -fx-font-size: 13px;"/>
+                    <Label fx:id="allTimeAvgAcc" text="0.0%" style="-fx-text-fill: #ffffff; -fx-font-size: 22px; -fx-font-weight: bold; -fx-font-family: 'Courier New';"/>
+                </VBox>
 
+            </HBox>
+        </VBox>
 
-<VBox alignment="CENTER" spacing="30.0" styleClass="game-root" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.TYPERUSH.ProfileController">
+        <!-- TODAY STATISTICS -->
+        <VBox spacing="10" maxWidth="1100">
+            <Label text="Statistics for Today" style="-fx-font-size: 16px; -fx-text-fill: #00E5FF; -fx-font-family: 'Courier New';"/>
+            <HBox spacing="12" alignment="CENTER_LEFT">
 
+                <VBox alignment="CENTER" prefWidth="170" style="-fx-background-color: #1a1a1a; -fx-border-color: #00E5FF; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 14;">
+                    <Label text="Time:" style="-fx-text-fill: #888888; -fx-font-size: 13px;"/>
+                    <Label fx:id="todayTime" text="00:00:00" style="-fx-text-fill: #ffffff; -fx-font-size: 22px; -fx-font-weight: bold; -fx-font-family: 'Courier New';"/>
+                </VBox>
 
+                <VBox alignment="CENTER" prefWidth="170" style="-fx-background-color: #1a1a1a; -fx-border-color: #00E5FF; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 14;">
+                    <Label text="Lessons:" style="-fx-text-fill: #888888; -fx-font-size: 13px;"/>
+                    <Label fx:id="todayLessons" text="0" style="-fx-text-fill: #ffffff; -fx-font-size: 22px; -fx-font-weight: bold; -fx-font-family: 'Courier New';"/>
+                </VBox>
 
-    <Label styleClass="login-title" text="RACE HISTORY" />
+                <VBox alignment="CENTER" prefWidth="170" style="-fx-background-color: #1a1a1a; -fx-border-color: #00E5FF; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 14;">
+                    <Label text="Top speed:" style="-fx-text-fill: #888888; -fx-font-size: 13px;"/>
+                    <Label fx:id="todayTopSpeed" text="0wpm" style="-fx-text-fill: #ffffff; -fx-font-size: 22px; -fx-font-weight: bold; -fx-font-family: 'Courier New';"/>
+                </VBox>
 
+                <VBox alignment="CENTER" prefWidth="170" style="-fx-background-color: #1a1a1a; -fx-border-color: #00E5FF; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 14;">
+                    <Label text="Average speed:" style="-fx-text-fill: #888888; -fx-font-size: 13px;"/>
+                    <Label fx:id="todayAvgSpeed" text="0.0wpm" style="-fx-text-fill: #ffffff; -fx-font-size: 22px; -fx-font-weight: bold; -fx-font-family: 'Courier New';"/>
+                </VBox>
 
+                <VBox alignment="CENTER" prefWidth="170" style="-fx-background-color: #1a1a1a; -fx-border-color: #00E5FF; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 14;">
+                    <Label text="Top accuracy:" style="-fx-text-fill: #888888; -fx-font-size: 13px;"/>
+                    <Label fx:id="todayTopAcc" text="0%" style="-fx-text-fill: #ffffff; -fx-font-size: 22px; -fx-font-weight: bold; -fx-font-family: 'Courier New';"/>
+                </VBox>
 
-    <StackPane fx:id="graphContainer" prefHeight="300.0" maxWidth="1100.0" style="-fx-border-color: #aaaaaa; -fx-border-style: dashed; -fx-border-width: 2;">
+                <VBox alignment="CENTER" prefWidth="170" style="-fx-background-color: #1a1a1a; -fx-border-color: #00E5FF; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 14;">
+                    <Label text="Average accuracy:" style="-fx-text-fill: #888888; -fx-font-size: 13px;"/>
+                    <Label fx:id="todayAvgAcc" text="0.0%" style="-fx-text-fill: #ffffff; -fx-font-size: 22px; -fx-font-weight: bold; -fx-font-family: 'Courier New';"/>
+                </VBox>
 
-        <Label text="Graph will be inserted here" textFill="#aaaaaa" style="-fx-font-size: 16px;"/>
+            </HBox>
+        </VBox>
 
-    </StackPane>
+        <!-- SEPARATOR -->
+        <Separator maxWidth="1100" style="-fx-background-color: #333333;"/>
 
+        <!-- DETAILED HISTORY HEADER -->
+        <HBox alignment="CENTER" spacing="20" maxWidth="1100">
+            <Label text="Detailed History" style="-fx-font-size: 16px; -fx-text-fill: #ffffff; -fx-font-family: 'Courier New';"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Show All Time" onAction="#showAllTimeData"
+                    style="-fx-background-color: #1a1a1a; -fx-border-color: #00E5FF; -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-text-fill: #00E5FF; -fx-cursor: hand; -fx-padding: 6 16;"/>
+            <Button text="Show Today" onAction="#showTodayData"
+                    style="-fx-background-color: #1a1a1a; -fx-border-color: #00E5FF; -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-text-fill: #00E5FF; -fx-cursor: hand; -fx-padding: 6 16;"/>
+        </HBox>
 
+        <!-- GRAPH TOGGLE BUTTONS -->
+        <HBox alignment="CENTER" spacing="12" maxWidth="1100">
+            <ToggleButton fx:id="btnShowAcc" text="Accuracy Graph" onAction="#showAccuracyGraph"
+                          style="-fx-background-color: #1a1a1a; -fx-border-color: #00E5FF; -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-text-fill: #00E5FF; -fx-padding: 6 18; -fx-cursor: hand;"/>
+            <ToggleButton fx:id="btnShowWpm" text="WPM Graph" onAction="#showWpmGraph"
+                          style="-fx-background-color: #1a1a1a; -fx-border-color: #00E5FF; -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-text-fill: #00E5FF; -fx-padding: 6 18; -fx-cursor: hand;"/>
+        </HBox>
 
-    <TableView fx:id="historyTable" maxWidth="1100" prefHeight="400.0">
+        <!-- GRAPH CONTAINER -->
+        <StackPane fx:id="mainGraphContainer" prefHeight="350.0" maxWidth="1100.0"
+                   style="-fx-border-color: #333333; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-color: #1a1a1a; -fx-background-radius: 8; -fx-padding: 10;">
+            <Label text="Graph Loading..." style="-fx-text-fill: #555555;"/>
+        </StackPane>
 
-        <columns>
+        <!-- HISTORY TABLE -->
+        <TableView fx:id="historyTable" maxWidth="1100" prefHeight="300.0"
+                   style="-fx-background-color: #1a1a1a; -fx-border-color: #333333; -fx-border-width: 1;">
+            <columns>
+                <TableColumn fx:id="dateCol" prefWidth="250" text="Date &amp; Time"/>
+                <TableColumn fx:id="wpmCol" prefWidth="150" text="WPM"/>
+                <TableColumn fx:id="accCol" prefWidth="200" text="Accuracy (%)"/>
+                <TableColumn fx:id="timeCol" prefWidth="250" text="Time Taken (s)"/>
+                <TableColumn fx:id="wordsCol" prefWidth="200" text="Word Count"/>
+            </columns>
+        </TableView>
 
-            <TableColumn fx:id="dateCol" prefWidth="250" text="Date &amp; Time" />
+        <!-- BOTTOM BUTTONS -->
+        <HBox alignment="CENTER" spacing="20">
+            <Button onAction="#sortByWPM" text="SORT BY WPM"
+                    style="-fx-background-color: #00E5FF; -fx-text-fill: #111111; -fx-font-weight: bold; -fx-font-family: 'Courier New'; -fx-padding: 10 24; -fx-cursor: hand; -fx-background-radius: 6;"/>
+            <Button onAction="#backTo_menu" text="BACK TO MENU"
+                    style="-fx-background-color: transparent; -fx-border-color: #e2b714; -fx-border-width: 1; -fx-border-radius: 6; -fx-text-fill: #e2b714; -fx-font-family: 'Courier New'; -fx-padding: 9 22; -fx-cursor: hand;"/>
+        </HBox>
 
-            <TableColumn fx:id="wpmCol" prefWidth="150" text="WPM" />
-
-            <TableColumn fx:id="accCol" prefWidth="200" text="Accuracy (%)" />
-
-            <TableColumn fx:id="timeCol" prefWidth="250" text="Time Taken (s)" />
-
-            <TableColumn fx:id="wordsCol" prefWidth="200" text="Word Count" />
-
-        </columns>
-
-    </TableView>
-
-
-
-    <HBox alignment="CENTER" spacing="20">
-
-        <Button onAction="#sortHistory" styleClass="btn-premium" text="SORT BY WPM" />
-
-        <Button onAction="#backTo_menu" styleClass="btn-signup" text="BACK TO menu" />
-
-    </HBox>
-
-</VBox>
-
+    </VBox>
+</ScrollPane>

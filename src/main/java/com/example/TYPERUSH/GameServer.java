@@ -30,7 +30,7 @@ public class GameServer extends Thread {
             out.println("NAME:" + GameSession.localPlayerName);
             out.println("PARA:" + paragraph);
 
-// Read joiner's NAME first before setting up the UI
+
             String firstLine = in.readLine();
             if (firstLine != null && firstLine.startsWith("NAME:")) {
                 GameSession.opponentName = firstLine.substring(5); // ← store joiner's name
