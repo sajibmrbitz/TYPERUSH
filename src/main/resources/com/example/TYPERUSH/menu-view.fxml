@@ -85,10 +85,13 @@
                             </effect>
                         </Button>
 
-                        <Button mnemonicParsing="false" onAction="#tutorPart" prefHeight="70.0" prefWidth="320.0" style="-fx-background-color: transparent; -fx-border-color: #444c56; -fx-border-width: 2; -fx-border-radius: 8; -fx-text-fill: #c9d1d9; -fx-cursor: hand; -fx-padding: 10 20;" text="TYPE TUTOR">
+                        <Button mnemonicParsing="false" onAction="#tutorPart" prefHeight="70.0" prefWidth="320.0" style="-fx-background-color: transparent; -fx-border-color: #00E5FF; -fx-border-width: 2; -fx-border-radius: 8; -fx-text-fill: #00E5FF; -fx-cursor: hand; -fx-padding: 10 20;" text="TYPE TUTOR">
                             <font>
                                 <Font name="System Bold" size="22.0" />
                             </font>
+                            <effect>
+                                <DropShadow color="#00e5ff30" offsetY="5.0" radius="15.0" />
+                            </effect>
                         </Button>
 
                         <Button mnemonicParsing="false" onAction="#history_part" prefHeight="39.0" prefWidth="319.0" style="-fx-background-color: transparent; -fx-border-color: #00E5FF; -fx-border-width: 2; -fx-text-fill: #00E5FF; -fx-cursor: hand; -fx-padding: 10 20; -fx-border-radius: 8;" text="TYPE HISTORY">
@@ -118,6 +121,18 @@
                 <TextFlow />
             </children>
         </VBox>
+        <Button text="About / Developers" onAction="#aboutPage"
+                AnchorPane.bottomAnchor="20.0"
+                AnchorPane.rightAnchor="20.0"
+                style="-fx-background-color: transparent;
+               -fx-border-color: #444c56;
+               -fx-border-width: 1;
+               -fx-border-radius: 6;
+               -fx-text-fill: #8b949e;
+               -fx-cursor: hand;
+               -fx-padding: 6 16;
+               -fx-font-size: 13px;"/>
+
 
     </children>
 </AnchorPane>

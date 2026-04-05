@@ -28,6 +28,7 @@ public class TutorLevelController extends BaseController {
     }
 
     private void startTutor() {
+        GameController.setTutorMode(true);
         switchScene("game-view.fxml", "TypeRush - Typing Session");
     }
 }

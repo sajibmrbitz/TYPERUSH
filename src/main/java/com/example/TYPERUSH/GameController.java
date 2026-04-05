@@ -3,22 +3,27 @@ package com.example.TYPERUSH;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.TextFlow;
 import java.io.InputStream;
 import java.util.Random;
-import javafx.scene.media.AudioClip;
 
 public class GameController extends BaseController {
     @FXML private Label wpmLabel, accuracyLabel, levelLabel;
     @FXML private TextFlow targetTextFlow;
     @FXML private TextField inputField;
     @FXML private StackPane carContainer;
+    @FXML private Pane raceTrackContainer;
     @FXML private ImageView handGuideView;
 
     private static String selectedDifficulty = "NORMAL";
+    private static boolean isTutorMode = false;
 
+    public static void setTutorMode(boolean value) {
+        isTutorMode = value;
+    }
 
     private final String[] beginnerBank = {
             "osman bin hadi is a young talent in our country who is known for his work in bangladesh today",
@@ -47,8 +52,7 @@ public class GameController extends BaseController {
     private long startTime;
     private int totalKeyStrokes = 0, correctKeyStrokes = 0, wpm = 0, accuracy = 100, wordCount = 0;
     private boolean isRunning = false, isRaceFinished = false;
-    private int previousInputLength=0;
-
+    private int previousInputLength = 0;
 
     public static void setDifficulty(String diff) {
         selectedDifficulty = diff;
@@ -56,6 +60,15 @@ public class GameController extends BaseController {
 
     @FXML public void initialize() {
         levelLabel.setText("Level: " + selectedDifficulty);
+
+        if (isTutorMode) {
+            raceTrackContainer.setVisible(false);
+            raceTrackContainer.setManaged(false);
+        } else {
+            raceTrackContainer.setVisible(true);
+            raceTrackContainer.setManaged(true);
+        }
+
         resetGame();
     }
 
@@ -63,8 +76,10 @@ public class GameController extends BaseController {
         previousInputLength = 0;
         totalKeyStrokes = 0;
         correctKeyStrokes = 0;
-        isRunning = false; isRaceFinished = false;
-        inputField.clear(); inputField.setEditable(true);
+        isRunning = false;
+        isRaceFinished = false;
+        inputField.clear();
+        inputField.setEditable(true);
         inputField.setStyle("-fx-border-color: #333;");
 
         Random rand = new Random();
@@ -80,13 +95,24 @@ public class GameController extends BaseController {
 
         targetTextFlow.getChildren().clear();
         for (int i = 0; i < currentText.length(); i++) {
-            Label charLabel = new Label(String.valueOf(currentText.charAt(i)));
+            char c = currentText.charAt(i);
+            Label charLabel = new Label(String.valueOf(c));
             charLabel.setStyle("-fx-text-fill: #888; -fx-font-size: 24px; -fx-font-family: 'Courier New';");
+
+            if (c == ' ') {
+                // space = TextFlow is allowed to wrap here
+                charLabel.setMinWidth(0);
+                charLabel.setPrefWidth(8);
+            } else {
+                // non-space = never break mid-word
+                charLabel.setMinWidth(Label.USE_PREF_SIZE);
+            }
+
             targetTextFlow.getChildren().add(charLabel);
         }
 
         wordCount = currentText.split("\\s+").length;
-        carContainer.setLayoutX(40);
+        if (!isTutorMode) carContainer.setLayoutX(40);
         wpmLabel.setText("WPM: 0");
         accuracyLabel.setText("Accuracy: 100%");
         updateHandGuide(currentText.charAt(0));
@@ -104,27 +130,28 @@ public class GameController extends BaseController {
             return;
         }
 
-        if(inputLength > previousInputLength && inputLength <= currentText.length()) {
-            char typedChar = input.charAt(inputLength -1);
-            char targetChar = currentText.charAt(inputLength-1);
-
-            if(typedChar == targetChar) {
+        if (inputLength > previousInputLength && inputLength <= currentText.length()) {
+            char typedChar = input.charAt(inputLength - 1);
+            char targetChar = currentText.charAt(inputLength - 1);
+            if (typedChar == targetChar) {
                 SoundManager.getInstance().playCorrect();
-            }
-            else{
+            } else {
                 SoundManager.getInstance().playWrong();
             }
         }
-        previousInputLength=inputLength;
+        previousInputLength = inputLength;
 
         if (!isRunning) { startTime = System.currentTimeMillis(); isRunning = true; }
 
         totalKeyStrokes++;
         int currentCorrectInInput = 0;
+
         for (int i = 0; i < targetTextFlow.getChildren().size(); i++) {
             Label l = (Label) targetTextFlow.getChildren().get(i);
+            char c = currentText.charAt(i);
+
             if (i < inputLength) {
-                if (input.charAt(i) == currentText.charAt(i)) {
+                if (input.charAt(i) == c) {
                     l.setStyle("-fx-background-color: rgba(46, 204, 113, 0.3); -fx-text-fill: white; -fx-font-size: 24px; -fx-font-family: 'Courier New';");
                     currentCorrectInInput++;
                 } else {
@@ -133,11 +160,22 @@ public class GameController extends BaseController {
             } else {
                 l.setStyle("-fx-background-color: transparent; -fx-text-fill: #888; -fx-font-size: 24px; -fx-font-family: 'Courier New';");
             }
+
+            // reapply word boundary rules after every style change
+            if (c == ' ') {
+                l.setMinWidth(0);
+                l.setPrefWidth(8);
+            } else {
+                l.setMinWidth(Label.USE_PREF_SIZE);
+            }
         }
 
         correctKeyStrokes = currentCorrectInInput;
         double ratio = (double) correctKeyStrokes / currentText.length();
-        carContainer.setLayoutX(40.0 + (ratio * 1000.0));
+
+        if (!isTutorMode) {
+            carContainer.setLayoutX(40.0 + (ratio * 1000.0));
+        }
 
         updateStats(inputLength);
         if (inputLength < currentText.length()) {
@@ -156,7 +194,14 @@ public class GameController extends BaseController {
     private void resetHighlighting() {
         for (int i = 0; i < targetTextFlow.getChildren().size(); i++) {
             Label l = (Label) targetTextFlow.getChildren().get(i);
+            char c = currentText.charAt(i);
             l.setStyle("-fx-background-color: transparent; -fx-text-fill: #888; -fx-font-size: 24px; -fx-font-family: 'Courier New';");
+            if (c == ' ') {
+                l.setMinWidth(0);
+                l.setPrefWidth(8);
+            } else {
+                l.setMinWidth(Label.USE_PREF_SIZE);
+            }
         }
     }
 
@@ -192,5 +237,5 @@ public class GameController extends BaseController {
     }
 
     @FXML protected void goToProfile() { switchScene("profile-view.fxml", "User Profile"); }
-    @FXML protected void menupage(){  switchScene("menu-view.fxml", "Menu Page");}
+    @FXML protected void menupage() { switchScene("menu-view.fxml", "Menu Page"); }
 }
