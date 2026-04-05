@@ -1,5 +1,7 @@
 package com.example.TYPERUSH;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
@@ -7,6 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.TextFlow;
+import javafx.util.Duration;
 import java.io.InputStream;
 import java.util.Random;
 
@@ -53,6 +56,7 @@ public class GameController extends BaseController {
     private int totalKeyStrokes = 0, correctKeyStrokes = 0, wpm = 0, accuracy = 100, wordCount = 0;
     private boolean isRunning = false, isRaceFinished = false;
     private int previousInputLength = 0;
+    private Timeline wpmTimer;
 
     public static void setDifficulty(String diff) {
         selectedDifficulty = diff;
@@ -73,6 +77,7 @@ public class GameController extends BaseController {
     }
 
     public void resetGame() {
+        stopWpmTimer();
         previousInputLength = 0;
         totalKeyStrokes = 0;
         correctKeyStrokes = 0;
@@ -141,7 +146,11 @@ public class GameController extends BaseController {
         }
         previousInputLength = inputLength;
 
-        if (!isRunning) { startTime = System.currentTimeMillis(); isRunning = true; }
+        if (!isRunning) {
+            startTime = System.currentTimeMillis();
+            isRunning = true;
+            startWpmTimer();
+        }
 
         totalKeyStrokes++;
         int currentCorrectInInput = 0;
@@ -185,6 +194,7 @@ public class GameController extends BaseController {
         if (inputLength >= currentText.length()) {
             isRunning = false;
             isRaceFinished = true;
+            stopWpmTimer();
             inputField.setEditable(false);
             SoundManager.getInstance().playFinish();
             saveResult();
@@ -221,7 +231,7 @@ public class GameController extends BaseController {
     private void updateStats(int charLength) {
         long elapsed = System.currentTimeMillis() - startTime;
         if (elapsed > 0) {
-            wpm = (int) ((correctKeyStrokes / 5.0) / ((elapsed / 1000.0) / 60.0));
+            wpm = (int) Math.ceil(((correctKeyStrokes / 5.0) / ((elapsed / 1000.0) / 60.0)));
             accuracy = (int) (((double) correctKeyStrokes / totalKeyStrokes) * 100);
             wpmLabel.setText("WPM: " + wpm);
             accuracyLabel.setText("Accuracy: " + (accuracy > 100 ? 100 : accuracy) + "%");
@@ -233,6 +243,25 @@ public class GameController extends BaseController {
         if (timeTaken > 0.1) {
             UserManager.addResult(new RaceResult(wpm, accuracy, timeTaken, wordCount));
             levelLabel.setText("Race Saved!");
+        }
+    }
+
+    private void startWpmTimer() {
+        stopWpmTimer();
+        wpmTimer = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+            if (isRunning && !isRaceFinished) {
+                int inputLength = inputField.getText().length();
+                updateStats(inputLength);
+            }
+        }));
+        wpmTimer.setCycleCount(Timeline.INDEFINITE);
+        wpmTimer.play();
+    }
+
+    private void stopWpmTimer() {
+        if (wpmTimer != null) {
+            wpmTimer.stop();
+            wpmTimer = null;
         }
     }
 

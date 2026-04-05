@@ -10,6 +10,13 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.Color;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 public class ProfileController extends BaseController {
@@ -25,6 +32,8 @@ public class ProfileController extends BaseController {
     private LineChart<String, Number> accChart;
     private LineChart<String, Number> wpmChart;
     private ToggleGroup graphToggleGroup;
+
+    @FXML private HBox activityGridContainer;
 
     // Statistics Labels (All Time & Today)
     @FXML private Label allTimeTime, allTimeLessons, allTimeTopSpeed, allTimeAvgSpeed, allTimeTopAcc, allTimeAvgAcc;
@@ -55,6 +64,7 @@ public class ProfileController extends BaseController {
         calculateAndSetStats(allResults, true);
         calculateAndSetStats(todayResults, false);
 
+        buildActivityGrid(allResults);
 
         dateCol.setSortType(TableColumn.SortType.ASCENDING);
         historyTable.getSortOrder().add(dateCol);
@@ -76,6 +86,64 @@ public class ProfileController extends BaseController {
             mainGraphContainer.getChildren().clear();
             mainGraphContainer.getChildren().add(wpmChart);
         }
+    }
+
+    // ==========================================
+    // Activity Map Logic
+    // ==========================================
+    private void buildActivityGrid(List<RaceResult> allResults) {
+        if (activityGridContainer == null) return;
+        activityGridContainer.getChildren().clear();
+
+        Map<LocalDate, Integer> dailyCounts = new HashMap<>();
+        for (RaceResult r : allResults) {
+            try {
+                LocalDate d = LocalDate.parse(r.getDateTime().substring(0, 10));
+                dailyCounts.put(d, dailyCounts.getOrDefault(d, 0) + 1);
+            } catch (Exception e) {
+                // ignore parsing errors
+            }
+        }
+
+        LocalDate endDate = LocalDate.now();
+        LocalDate startDate = endDate.minusDays(364);
+        
+        int daysFromSunday = startDate.getDayOfWeek().getValue() % 7;
+        startDate = startDate.minusDays(daysFromSunday);
+
+        LocalDate current = startDate;
+
+        while (!current.isAfter(endDate) || current.getDayOfWeek().getValue() % 7 != 0) {
+            VBox weekCol = new VBox(4);
+            for (int i = 0; i < 7; i++) {
+                if (current.isAfter(endDate)) {
+                    Rectangle rx = new Rectangle(12, 12, Color.TRANSPARENT);
+                    weekCol.getChildren().add(rx);
+                } else {
+                    int count = dailyCounts.getOrDefault(current, 0);
+                    Color c = getColorForCount(count);
+
+                    Rectangle rect = new Rectangle(12, 12, c);
+                    rect.setArcWidth(4);
+                    rect.setArcHeight(4);
+
+                    Tooltip tip = new Tooltip(count + " races on " + current.toString());
+                    Tooltip.install(rect, tip);
+
+                    weekCol.getChildren().add(rect);
+                }
+                current = current.plusDays(1);
+            }
+            activityGridContainer.getChildren().add(weekCol);
+        }
+    }
+
+    private Color getColorForCount(int count) {
+        if (count == 0) return Color.web("#2d333b");
+        if (count < 3) return Color.web("#544605");
+        if (count < 6) return Color.web("#8a7106");
+        if (count < 10) return Color.web("#bd9b08");
+        return Color.web("#e2b714");
     }
 
     // ==========================================

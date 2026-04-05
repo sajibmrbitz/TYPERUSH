@@ -1,11 +1,14 @@
 package com.example.TYPERUSH;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.TextFlow;
+import javafx.util.Duration;
 
 public class MultiplayerGameController extends BaseController implements ProgressListener {
 
@@ -26,6 +29,7 @@ public class MultiplayerGameController extends BaseController implements Progres
     private int totalKeyStrokes = 0, correctKeyStrokes = 0;
     private int lastWpm = 0, lastAcc = 100;
     private int previousInputLength = 0;
+    private Timeline wpmTimer;
 
     @FXML
     public void initialize() {
@@ -80,6 +84,7 @@ public class MultiplayerGameController extends BaseController implements Progres
         if (!isRunning && inputLength > 0) {
             startTime = System.currentTimeMillis();
             isRunning = true;
+            startWpmTimer();
         }
 
         totalKeyStrokes++;
@@ -119,6 +124,7 @@ public class MultiplayerGameController extends BaseController implements Progres
         if (prefixMatch == currentText.length()) {
             if (!isRaceFinished) {
                 isRaceFinished = true;
+                stopWpmTimer();
                 GameSession.sendFinish();
                 SoundManager.getInstance().playFinish();
                 showResultOverlay(true);
@@ -157,6 +163,7 @@ public class MultiplayerGameController extends BaseController implements Progres
         Platform.runLater(() -> {
             if (!isRaceFinished) {
                 isRaceFinished = true;
+                stopWpmTimer();
                 showResultOverlay(false);
             }
         });
@@ -234,9 +241,35 @@ public class MultiplayerGameController extends BaseController implements Progres
         resultOverlay.setVisible(true);
     }
 
+    private void startWpmTimer() {
+        stopWpmTimer();
+        wpmTimer = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+            if (isRunning && !isRaceFinished) {
+                long elapsed = System.currentTimeMillis() - startTime;
+                if (elapsed > 0) {
+                    lastWpm = (int) ((correctKeyStrokes / 5.0) / ((elapsed / 1000.0) / 60.0));
+                    wpmLabel.setText("WPM: " + lastWpm);
+                    accuracyLabel.setText("Accuracy: " + (lastAcc > 100 ? 100 : lastAcc) + "%");
+                    double myRatio = (double) correctKeyStrokes / currentText.length();
+                    GameSession.sendStats(myRatio, lastWpm, lastAcc);
+                }
+            }
+        }));
+        wpmTimer.setCycleCount(Timeline.INDEFINITE);
+        wpmTimer.play();
+    }
+
+    private void stopWpmTimer() {
+        if (wpmTimer != null) {
+            wpmTimer.stop();
+            wpmTimer = null;
+        }
+    }
+
     @FXML
     protected void leaveMatch() {
         isRaceFinished = true;
+        stopWpmTimer();
         GameSession.sendLeave();
 
         new Thread(() -> {
