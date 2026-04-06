@@ -294,8 +294,9 @@ public class GameController extends BaseController {
         comboLabel.setScaleX(0.2);
         comboLabel.setScaleY(0.2);
         comboLabel.setOpacity(0.0);
+        //comboLabel.setTranslateY(-60);
         
-        double targetScale = Math.min(1.6, 1.0 + (multiplier - 1) * 0.15);
+        double targetScale = 1.0;
         
         ScaleTransition st = new ScaleTransition(Duration.millis(300), comboLabel);
         st.setToX(targetScale);
