@@ -22,6 +22,17 @@ import java.util.Map;
 import java.util.List;
 
 public class ProfileController extends BaseController {
+    // Button style constants for active/inactive graph toggle
+    private static final String BTN_ACTIVE =
+            "-fx-background-color: #00E5FF; -fx-border-color: #00E5FF; -fx-border-width: 1; " +
+                    "-fx-border-radius: 6; -fx-background-radius: 6; -fx-text-fill: #0D1117; " +
+                    "-fx-font-weight: bold; -fx-padding: 6 18; -fx-cursor: hand;";
+    private static final String BTN_INACTIVE =
+            "-fx-background-color: rgba(22,27,34,0.85); -fx-border-color: #444c56; -fx-border-width: 1; " +
+                    "-fx-border-radius: 6; -fx-background-radius: 6; -fx-text-fill: #555e68; " +
+                    "-fx-padding: 6 18; -fx-cursor: hand;";
+
+
 
 
     @FXML private TableView<RaceResult> historyTable;
@@ -88,6 +99,8 @@ public class ProfileController extends BaseController {
             mainGraphContainer.getChildren().clear();
             mainGraphContainer.getChildren().add(accChart);
         }
+        if (btnShowAcc != null) btnShowAcc.setStyle(BTN_ACTIVE);
+        if (btnShowWpm != null) btnShowWpm.setStyle(BTN_INACTIVE);
     }
 
     @FXML protected void showWpmGraph() {
@@ -95,9 +108,11 @@ public class ProfileController extends BaseController {
             mainGraphContainer.getChildren().clear();
             mainGraphContainer.getChildren().add(wpmChart);
         }
+        if (btnShowWpm != null) btnShowWpm.setStyle(BTN_ACTIVE);
+        if (btnShowAcc != null) btnShowAcc.setStyle(BTN_INACTIVE);
     }
 
-     private void buildActivityGrid(List<RaceResult> allResults) {
+    private void buildActivityGrid(List<RaceResult> allResults) {
         if (activityGridContainer == null) return;
         activityGridContainer.getChildren().clear();
 
@@ -113,7 +128,7 @@ public class ProfileController extends BaseController {
 
         LocalDate endDate = LocalDate.now();
         LocalDate startDate = endDate.minusDays(364);
-        
+
         int daysFromSunday = startDate.getDayOfWeek().getValue() % 7;
         startDate = startDate.minusDays(daysFromSunday);
 
@@ -152,7 +167,7 @@ public class ProfileController extends BaseController {
         return Color.web("#e2b714");
     }
 
-     private void calculateAndSetStats(List<RaceResult> results, boolean isAllTime) {
+    private void calculateAndSetStats(List<RaceResult> results, boolean isAllTime) {
         int lessons = results.size();
         double totalTime = 0;
         int topSpeed = 0, topAcc = 0;
@@ -189,7 +204,7 @@ public class ProfileController extends BaseController {
         int secs = (int) totalSeconds % 60;
         return String.format("%02d:%02d:%02d", hours, minutes, secs);
     }
-   @FXML protected void showAllTimeData() { loadData(UserManager.getAllResults()); }
+    @FXML protected void showAllTimeData() { loadData(UserManager.getAllResults()); }
     @FXML protected void showTodayData() { loadData(UserManager.getTodaysResults()); }
 
     @FXML protected void sortByWPM() {
