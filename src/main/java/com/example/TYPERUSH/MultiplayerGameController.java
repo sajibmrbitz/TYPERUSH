@@ -9,6 +9,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
+import java.util.List;
+import java.util.ArrayList;
+import javafx.scene.layout.HBox;
 
 public class MultiplayerGameController extends BaseController implements ProgressListener {
 
@@ -23,6 +26,7 @@ public class MultiplayerGameController extends BaseController implements Progres
     @FXML private Label resultIcon, resultTitle, resultMessage, resultWpm, resultAcc;
 
     private String currentText = "";
+    private List<Label> charLabels = new ArrayList<>();
     private boolean isRaceFinished = false;
     private boolean isRunning = false;
     private long startTime;
@@ -39,7 +43,7 @@ public class MultiplayerGameController extends BaseController implements Progres
 
         if (GameSession.isHost) {
             opponentStatusLabel.setText("Waiting for opponent to join...");
-            currentText = "The quick brown fox jumps over the lazy dog in a real time multiplayer race.";
+            currentText = "As a final act of love, I will never reach you out again. But I will become everything I told you about. I won't chase you. I won't beg for you a closure. Instead, I will pour all that love into myself. I'll build the life which I promised I'll build with you. And maybe one day, you'll hear my name and you'll realize what walked away from you.";
             GameSession.server = new GameServer(currentText, this);
             GameSession.server.start();
         }
@@ -92,8 +96,8 @@ public class MultiplayerGameController extends BaseController implements Progres
         int prefixMatch = 0;
         boolean hasError = false;
 
-        for (int i = 0; i < targetTextFlow.getChildren().size(); i++) {
-            Label l = (Label) targetTextFlow.getChildren().get(i);
+        for (int i = 0; i < charLabels.size(); i++) {
+            Label l = charLabels.get(i);
             if (i < inputLength) {
                 if (!hasError && input.charAt(i) == currentText.charAt(i)) {
                     l.setStyle("-fx-background-color: rgba(46, 204, 113, 0.3); -fx-text-fill: white; -fx-font-size: 24px; -fx-font-family: 'Courier New';");
@@ -121,7 +125,7 @@ public class MultiplayerGameController extends BaseController implements Progres
 
         GameSession.sendStats(myRatio, lastWpm, lastAcc);
 
-        if (prefixMatch == currentText.length()) {
+        if (inputLength >= currentText.length()) {
             if (!isRaceFinished) {
                 isRaceFinished = true;
                 stopWpmTimer();
@@ -134,17 +138,34 @@ public class MultiplayerGameController extends BaseController implements Progres
 
     @Override
     public void onParagraphReceived(String para) {
-        Platform.runLater(() -> {
-            currentText = para;
-            opponentStatusLabel.setText(GameSession.opponentName);
-            opponentStatusLabel.setStyle("-fx-text-fill: #e2b714;");
-            inputField.setEditable(false);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                currentText = para;
+                opponentStatusLabel.setText(GameSession.opponentName);
+                opponentStatusLabel.setStyle("-fx-text-fill: #e2b714;");
+                inputField.setEditable(false);
 
-            targetTextFlow.getChildren().clear();
-            for (int i = 0; i < currentText.length(); i++) {
-                Label charLabel = new Label(String.valueOf(currentText.charAt(i)));
-                charLabel.setStyle("-fx-text-fill: #888; -fx-font-size: 24px; -fx-font-family: 'Courier New';");
-                targetTextFlow.getChildren().add(charLabel);
+                targetTextFlow.getChildren().clear();
+                charLabels.clear();
+                HBox currentWord = new HBox();
+                for (int i = 0; i < currentText.length(); i++) {
+                    char c = currentText.charAt(i);
+                    Label charLabel = new Label(String.valueOf(c));
+                    charLabel.setStyle("-fx-text-fill: #888; -fx-font-size: 24px; -fx-font-family: 'Courier New';");
+                    charLabel.setMinWidth(Label.USE_PREF_SIZE);
+
+                    charLabels.add(charLabel);
+                    currentWord.getChildren().add(charLabel);
+
+                    if (c == ' ') {
+                        targetTextFlow.getChildren().add(currentWord);
+                        currentWord = new HBox();
+                    }
+                }
+                if (!currentWord.getChildren().isEmpty()) {
+                    targetTextFlow.getChildren().add(currentWord);
+                }
             }
         });
     }
@@ -194,6 +215,7 @@ public class MultiplayerGameController extends BaseController implements Progres
             }
         });
     }
+
     @Override
     public void onCountdownStart() {
         Platform.runLater(() -> {
