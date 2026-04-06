@@ -34,4 +34,35 @@ public class MenuController extends BaseController {
     protected void backToMenu() {
         switchScene("menu-view.fxml", "TypeRush - Main Menu");
     }
+    @FXML
+    protected void openIfatFacebook() {
+        try {
+            java.awt.Desktop.getDesktop().browse(
+                    new java.net.URI("https://web.facebook.com/mahtab.hasan.ifat/")
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    protected void openSajibFacebook() {
+        try {
+            java.awt.Desktop.getDesktop().browse(
+                    new java.net.URI("https://www.facebook.com/madvirus.sajib.991")
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    protected void openGithubRepo() {
+        try {
+            java.awt.Desktop.getDesktop().browse(
+                    new java.net.URI("https://github.com/sajibmrbitz/TYPERUSH")
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

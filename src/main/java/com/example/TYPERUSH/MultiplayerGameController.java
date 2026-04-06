@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
@@ -16,38 +17,67 @@ import javafx.scene.layout.HBox;
 public class MultiplayerGameController extends BaseController implements ProgressListener {
 
     @FXML private StackPane myCarContainer, opponentCarContainer;
-    @FXML private Label wpmLabel, accuracyLabel, opponentStatusLabel, opponentWpmLabel, opponentAccLabel;
+    @FXML private Label wpmLabel, accuracyLabel;
+    @FXML private Label opponentStatusLabel, opponentWpmLabel, opponentAccLabel;
     @FXML private Label myNameLabel;
+    @FXML private Label timerLabel;
     @FXML private TextFlow targetTextFlow;
     @FXML private TextField inputField;
     @FXML private Label countdownLabel;
-    // overlay
     @FXML private StackPane resultOverlay;
     @FXML private Label resultIcon, resultTitle, resultMessage, resultWpm, resultAcc;
+    @FXML private StackPane freezeWarning;
+
+    private static final int MATCH_SECONDS   = 150;
+    private static final int MAX_WRONG_CHARS = 10;
 
     private String currentText = "";
     private List<Label> charLabels = new ArrayList<>();
-    private boolean isRaceFinished = false;
-    private boolean isRunning = false;
+    private boolean isRaceFinished  = false;
+    private boolean isRunning       = false;
+    private boolean isFrozen        = false;
+    private boolean matchTimerStarted = false;
+
     private long startTime;
-    private int totalKeyStrokes = 0, correctKeyStrokes = 0;
-    private int lastWpm = 0, lastAcc = 100;
+    private int totalKeyStrokes   = 0;
+    private int correctKeyStrokes = 0;
+    private int lastWpm           = 0;
+    private int lastAcc           = 100;
     private int previousInputLength = 0;
+
+     private int wrongCharCount = 0;
+
+    private double myProgress     = 0.0;
+    private double opponentProgress = 0.0;
+
     private Timeline wpmTimer;
+    private Timeline matchTimer;
+    private int secondsLeft = MATCH_SECONDS;
 
     @FXML
     public void initialize() {
         previousInputLength = 0;
         inputField.setEditable(false);
         myNameLabel.setText(GameSession.localPlayerName);
+        updateTimerLabel(MATCH_SECONDS);
+
+        inputField.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
+            if (isFrozen) {
+                if (event.getCode() != KeyCode.BACK_SPACE && event.getCode() != KeyCode.DELETE) {
+                    event.consume();   // block everything except backspace
+                }
+            }
+        });
 
         if (GameSession.isHost) {
             opponentStatusLabel.setText("Waiting for opponent to join...");
-            currentText = "As a final act of love, I will never reach you out again. But I will become everything I told you about. I won't chase you. I won't beg for you a closure. Instead, I will pour all that love into myself. I'll build the life which I promised I'll build with you. And maybe one day, you'll hear my name and you'll realize what walked away from you.";
+            currentText = "As a final act of love, I will never reach you out again. But I will become everything I told you about. " +
+                    "I won't chase you. I won't beg for you a closure. Instead, I will pour all that love into myself. " +
+                    "I'll build the life which I promised I'll build with you. And maybe one day, you'll hear my name " +
+                    "and you'll realize what walked away from you.";
             GameSession.server = new GameServer(currentText, this);
             GameSession.server.start();
-        }
-        else {
+        } else {
             opponentStatusLabel.setText("Connecting to host...");
             GameSession.client = new GameClient(GameSession.joinIp, this);
             GameSession.client.start();
@@ -58,34 +88,35 @@ public class MultiplayerGameController extends BaseController implements Progres
     protected void handleTyping() {
         if (isRaceFinished) return;
 
-        String input = inputField.getText();
+        String input    = inputField.getText();
         int inputLength = input.length();
 
         if (inputLength > currentText.length()) {
             inputField.setText(input.substring(0, currentText.length()));
             inputField.positionCaret(currentText.length());
-            input = inputField.getText();
+            input       = inputField.getText();
             inputLength = input.length();
         }
 
-        if(inputLength == 0){
+        if (inputLength == 0) {
             previousInputLength = 0;
+            wrongCharCount      = 0;
+            unfreeze();
+            resetHighlighting();
+            return;
         }
 
-        if(inputLength > previousInputLength && inputLength <= currentText.length()){
-            char typedChar = input.charAt(inputLength - 1);
-            char targetChar = currentText.charAt(inputLength - 1);
-
-            if(typedChar == targetChar){
+        if (inputLength > previousInputLength && inputLength <= currentText.length()) {
+            char typed  = input.charAt(inputLength - 1);
+            char target = currentText.charAt(inputLength - 1);
+            if (typed == target) {
                 SoundManager.getInstance().playCorrect();
-            }
-            else{
+            } else {
                 SoundManager.getInstance().playWrong();
             }
         }
         previousInputLength = inputLength;
-
-        if (!isRunning && inputLength > 0) {
+    if (!isRunning && inputLength > 0) {
             startTime = System.currentTimeMillis();
             isRunning = true;
             startWpmTimer();
@@ -94,78 +125,164 @@ public class MultiplayerGameController extends BaseController implements Progres
         totalKeyStrokes++;
 
         int prefixMatch = 0;
+        int redCount    = 0;
         boolean hasError = false;
 
         for (int i = 0; i < charLabels.size(); i++) {
             Label l = charLabels.get(i);
             if (i < inputLength) {
                 if (!hasError && input.charAt(i) == currentText.charAt(i)) {
-                    l.setStyle("-fx-background-color: rgba(46, 204, 113, 0.3); -fx-text-fill: white; -fx-font-size: 24px; -fx-font-family: 'Courier New';");
+                    l.setStyle("-fx-background-color: rgba(46,204,113,0.3); -fx-text-fill: white; " +
+                            "-fx-font-size: 24px; -fx-font-family: 'Courier New';");
                     prefixMatch++;
                 } else {
-                    l.setStyle("-fx-background-color: rgba(255, 71, 87, 0.4); -fx-text-fill: white; -fx-font-size: 24px; -fx-font-family: 'Courier New';");
+                    l.setStyle("-fx-background-color: rgba(255,71,87,0.4); -fx-text-fill: white; " +
+                            "-fx-font-size: 24px; -fx-font-family: 'Courier New';");
                     hasError = true;
+                    redCount++;
                 }
             } else {
-                l.setStyle("-fx-background-color: transparent; -fx-text-fill: #888; -fx-font-size: 24px; -fx-font-family: 'Courier New';");
+                l.setStyle("-fx-background-color: transparent; -fx-text-fill: #888; " +
+                        "-fx-font-size: 24px; -fx-font-family: 'Courier New';");
             }
         }
 
+        wrongCharCount    = redCount;
         correctKeyStrokes = prefixMatch;
-        double myRatio = (double) correctKeyStrokes / currentText.length();
-        myCarContainer.setLayoutX(40.0 + (myRatio * 1000.0));
+
+        if (wrongCharCount >= MAX_WRONG_CHARS) {
+            freeze();
+        } else {
+            unfreeze();
+        }
+
+        myProgress = (double) correctKeyStrokes / currentText.length();
+        myCarContainer.setLayoutX(40.0 + (myProgress * 1000.0));
 
         long elapsed = System.currentTimeMillis() - startTime;
         if (elapsed > 0) {
             lastWpm = (int) ((correctKeyStrokes / 5.0) / ((elapsed / 1000.0) / 60.0));
             lastAcc = (int) (((double) correctKeyStrokes / totalKeyStrokes) * 100);
             wpmLabel.setText("WPM: " + lastWpm);
-            accuracyLabel.setText("Accuracy: " + (lastAcc > 100 ? 100 : lastAcc) + "%");
+            accuracyLabel.setText("Accuracy: " + Math.min(lastAcc, 100) + "%");
         }
 
-        GameSession.sendStats(myRatio, lastWpm, lastAcc);
+        GameSession.sendStats(myProgress, lastWpm, lastAcc);
 
-        if (inputLength >= currentText.length()) {
-            if (!isRaceFinished) {
-                isRaceFinished = true;
-                stopWpmTimer();
-                GameSession.sendFinish();
-                SoundManager.getInstance().playFinish();
-                showResultOverlay(true);
+        if (inputLength >= currentText.length() && !isRaceFinished) {
+            isRaceFinished = true;
+            stopWpmTimer();
+            stopMatchTimer();
+            GameSession.sendFinish();
+            SoundManager.getInstance().playFinish();
+            showResultOverlay(true, "Finished first!");
+        }
+    }
+
+    private void freeze() {
+        if (!isFrozen) {
+            isFrozen = true;
+            freezeWarning.setVisible(true);
+        }
+    }
+
+    private void unfreeze() {
+        if (isFrozen) {
+            isFrozen = false;
+            freezeWarning.setVisible(false);
+        }
+    }
+
+    private void resetHighlighting() {
+        for (Label l : charLabels) {
+            l.setStyle("-fx-background-color: transparent; -fx-text-fill: #888; " +
+                    "-fx-font-size: 24px; -fx-font-family: 'Courier New';");
+        }
+    }
+
+    private void startMatchTimer() {
+        stopMatchTimer();
+        secondsLeft = MATCH_SECONDS;
+        matchTimerStarted = true;
+        matchTimer = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+            secondsLeft--;
+            updateTimerLabel(secondsLeft);
+
+            if (secondsLeft <= 30) {
+                timerLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #ff4757;");
             }
-        }
+
+            if (secondsLeft <= 0) {
+                stopMatchTimer();
+                stopWpmTimer();
+                if (!isRaceFinished) {
+                    isRaceFinished = true;
+                    timeUpResolution();
+                }
+            }
+        }));
+        matchTimer.setCycleCount(MATCH_SECONDS);
+        matchTimer.play();
+    }
+
+    private void stopMatchTimer() {
+        if (matchTimer != null) { matchTimer.stop(); matchTimer = null; }
+    }
+
+    private void updateTimerLabel(int seconds) {
+        int m = seconds / 60;
+        int s = seconds % 60;
+        timerLabel.setText(String.format("%d:%02d", m, s));
+    }
+
+    private void timeUpResolution() {
+        GameSession.sendStats(myProgress, lastWpm, lastAcc);
+        Platform.runLater(() -> {
+            inputField.setEditable(false);
+            boolean iWin = myProgress > opponentProgress;
+            String reason = iWin
+                    ? "Time's up! You had more progress (" + (int)(myProgress * 100) + "% vs " + (int)(opponentProgress * 100) + "%)"
+                    : "Time's up! Opponent had more progress (" + (int)(opponentProgress * 100) + "% vs " + (int)(myProgress * 100) + "%)";
+
+            if (Math.abs(myProgress - opponentProgress) < 0.001) {
+                resultIcon.setText("\uD83E\uDD1D");
+                resultTitle.setText("IT'S A DRAW!");
+                resultTitle.setStyle("-fx-font-size: 52px; -fx-font-weight: bold; -fx-text-fill: #E2B714;");
+                resultMessage.setText("Time's up! Both of you had equal progress.");
+                resultWpm.setText(String.valueOf(lastWpm));
+                resultAcc.setText(Math.min(lastAcc, 100) + "%");
+                resultOverlay.setVisible(true);
+            } else {
+                showResultOverlay(iWin, reason);
+            }
+        });
     }
 
     @Override
     public void onParagraphReceived(String para) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                currentText = para;
-                opponentStatusLabel.setText(GameSession.opponentName);
-                opponentStatusLabel.setStyle("-fx-text-fill: #e2b714;");
-                inputField.setEditable(false);
+        Platform.runLater(() -> {
+            currentText = para;
+            opponentStatusLabel.setText(GameSession.opponentName);
+            opponentStatusLabel.setStyle("-fx-text-fill: #e2b714;");
+            inputField.setEditable(false);
 
-                targetTextFlow.getChildren().clear();
-                charLabels.clear();
-                HBox currentWord = new HBox();
-                for (int i = 0; i < currentText.length(); i++) {
-                    char c = currentText.charAt(i);
-                    Label charLabel = new Label(String.valueOf(c));
-                    charLabel.setStyle("-fx-text-fill: #888; -fx-font-size: 24px; -fx-font-family: 'Courier New';");
-                    charLabel.setMinWidth(Label.USE_PREF_SIZE);
-
-                    charLabels.add(charLabel);
-                    currentWord.getChildren().add(charLabel);
-
-                    if (c == ' ') {
-                        targetTextFlow.getChildren().add(currentWord);
-                        currentWord = new HBox();
-                    }
-                }
-                if (!currentWord.getChildren().isEmpty()) {
+            targetTextFlow.getChildren().clear();
+            charLabels.clear();
+            HBox currentWord = new HBox();
+            for (int i = 0; i < currentText.length(); i++) {
+                char c = currentText.charAt(i);
+                Label charLabel = new Label(String.valueOf(c));
+                charLabel.setStyle("-fx-text-fill: #888; -fx-font-size: 24px; -fx-font-family: 'Courier New';");
+                charLabel.setMinWidth(Label.USE_PREF_SIZE);
+                charLabels.add(charLabel);
+                currentWord.getChildren().add(charLabel);
+                if (c == ' ') {
                     targetTextFlow.getChildren().add(currentWord);
+                    currentWord = new HBox();
                 }
+            }
+            if (!currentWord.getChildren().isEmpty()) {
+                targetTextFlow.getChildren().add(currentWord);
             }
         });
     }
@@ -173,6 +290,7 @@ public class MultiplayerGameController extends BaseController implements Progres
     @Override
     public void onOpponentStats(double progress, int wpm, int accuracy) {
         Platform.runLater(() -> {
+            opponentProgress = progress;
             opponentCarContainer.setLayoutX(40.0 + (progress * 1000.0));
             opponentWpmLabel.setText("WPM: " + wpm);
             opponentAccLabel.setText("Accuracy: " + accuracy + "%");
@@ -185,7 +303,8 @@ public class MultiplayerGameController extends BaseController implements Progres
             if (!isRaceFinished) {
                 isRaceFinished = true;
                 stopWpmTimer();
-                showResultOverlay(false);
+                stopMatchTimer();
+                showResultOverlay(false, winnerName + " finished first!");
             }
         });
     }
@@ -195,7 +314,8 @@ public class MultiplayerGameController extends BaseController implements Progres
         Platform.runLater(() -> {
             if (!isRaceFinished) {
                 isRaceFinished = true;
-                resultIcon.setText("🚪");
+                stopMatchTimer();
+                resultIcon.setText("\uD83D\uDEAA");
                 resultTitle.setText("OPPONENT LEFT");
                 resultTitle.setStyle("-fx-font-size: 52px; -fx-font-weight: bold; -fx-text-fill: #ff4757;");
                 resultMessage.setText(GameSession.opponentName + " has left the match.");
@@ -210,9 +330,7 @@ public class MultiplayerGameController extends BaseController implements Progres
     @Override
     public void onError(String message) {
         Platform.runLater(() -> {
-            if (!isRaceFinished) {
-                opponentStatusLabel.setText("Error: " + message);
-            }
+            if (!isRaceFinished) opponentStatusLabel.setText("Error: " + message);
         });
     }
 
@@ -237,29 +355,27 @@ public class MultiplayerGameController extends BaseController implements Progres
                     Platform.runLater(() -> {
                         countdownLabel.setVisible(false);
                         inputField.setEditable(true);
+                        startMatchTimer();
                     });
-                } catch (InterruptedException e) {}
+                } catch (InterruptedException ignored) {}
             }).start();
         });
     }
 
-    private void showResultOverlay(boolean iWon) {
+    private void showResultOverlay(boolean iWon, String message) {
         inputField.setEditable(false);
-
         if (iWon) {
-            resultIcon.setText("🏆");
+            resultIcon.setText("\uD83C\uDFC6");
             resultTitle.setText("YOU WON!");
             resultTitle.setStyle("-fx-font-size: 52px; -fx-font-weight: bold; -fx-text-fill: #00E5FF;");
-            resultMessage.setText("Congratulations " + GameSession.localPlayerName + "! You finished first!");
         } else {
-            resultIcon.setText("❌");
+            resultIcon.setText("\u274C");
             resultTitle.setText("YOU LOST!");
             resultTitle.setStyle("-fx-font-size: 52px; -fx-font-weight: bold; -fx-text-fill: #E2B714;");
-            resultMessage.setText(GameSession.opponentName + " finished first. Better luck next time!");
         }
-
+        resultMessage.setText(message);
         resultWpm.setText(String.valueOf(lastWpm));
-        resultAcc.setText((lastAcc > 100 ? 100 : lastAcc) + "%");
+        resultAcc.setText(Math.min(lastAcc, 100) + "%");
         resultOverlay.setVisible(true);
     }
 
@@ -271,9 +387,8 @@ public class MultiplayerGameController extends BaseController implements Progres
                 if (elapsed > 0) {
                     lastWpm = (int) ((correctKeyStrokes / 5.0) / ((elapsed / 1000.0) / 60.0));
                     wpmLabel.setText("WPM: " + lastWpm);
-                    accuracyLabel.setText("Accuracy: " + (lastAcc > 100 ? 100 : lastAcc) + "%");
-                    double myRatio = (double) correctKeyStrokes / currentText.length();
-                    GameSession.sendStats(myRatio, lastWpm, lastAcc);
+                    accuracyLabel.setText("Accuracy: " + Math.min(lastAcc, 100) + "%");
+                    GameSession.sendStats(myProgress, lastWpm, lastAcc);
                 }
             }
         }));
@@ -282,20 +397,17 @@ public class MultiplayerGameController extends BaseController implements Progres
     }
 
     private void stopWpmTimer() {
-        if (wpmTimer != null) {
-            wpmTimer.stop();
-            wpmTimer = null;
-        }
+        if (wpmTimer != null) { wpmTimer.stop(); wpmTimer = null; }
     }
 
     @FXML
     protected void leaveMatch() {
         isRaceFinished = true;
         stopWpmTimer();
+        stopMatchTimer();
         GameSession.sendLeave();
-
         new Thread(() -> {
-            try { Thread.sleep(100); } catch (InterruptedException e) {}
+            try { Thread.sleep(100); } catch (InterruptedException ignored) {}
             Platform.runLater(() -> {
                 GameSession.disconnect();
                 switchScene("menu-view.fxml", "TypeRush - Menu");

@@ -5,44 +5,87 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<VBox alignment="TOP_CENTER" spacing="20.0" style="-fx-background-color: #272823; -fx-padding: 140 20 20 20;" styleClass="game-root" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.TYPERUSH.GameController">
-    <Pane fx:id="raceTrackContainer" prefHeight="160.0" prefWidth="1200.0" styleClass="race-track">
-        <children>
-            <Label layoutX="1150.0" layoutY="30.0" style="-fx-font-size: 60px;" text="🏁" />
-            <StackPane fx:id="carContainer" layoutX="40.0" layoutY="40.0" styleClass="car-glow">
-                <ImageView fitHeight="70.0" fitWidth="120.0" preserveRatio="true">
-                    <image><Image url="@car.png" /></image>
-                </ImageView>
-            </StackPane>
-        </children>
-    </Pane>
-    <!-- Combo Label + TextFlow wrapped in StackPane so combo overlays without shifting layout -->
-    <StackPane>
-        <TextFlow fx:id="targetTextFlow" maxWidth="1050" minHeight="150" style="-fx-background-color: rgba(0,0,0,0.5); -fx-padding: 20; -fx-background-radius: 15;" textAlignment="CENTER" />
-        <Label fx:id="comboLabel" opacity="0.0" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #ffaa00; -fx-font-family: 'Courier New';" text="Combo!" translateY="-120" />
-    </StackPane>
+<AnchorPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.TYPERUSH.GameController"
+            style="-fx-background-color: #272823;">
 
-    <TextField fx:id="inputField" maxWidth="850.0" onKeyReleased="#handleTyping" prefHeight="70.0" styleClass="typing-input" />
+    <VBox alignment="TOP_CENTER" spacing="20.0"
+          style="-fx-background-color: #272823; -fx-padding: 140 20 20 20;"
+          styleClass="game-root"
+          AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
 
-    <HBox alignment="CENTER" spacing="70.0">
-        <Label fx:id="wpmLabel" styleClass="stat-text" text="WPM: 0" />
-        <Label fx:id="accuracyLabel" styleClass="stat-text" text="Accuracy: 100%" />
-        <Label fx:id="levelLabel" styleClass="stat-text" text="Level: Manual Mode" />
-    </HBox>
+        <Pane fx:id="raceTrackContainer" prefHeight="160.0" prefWidth="1200.0" styleClass="race-track">
+            <children>
+                <Label layoutX="1150.0" layoutY="30.0" style="-fx-font-size: 60px;" text="&#127937;" />
+                <StackPane fx:id="carContainer" layoutX="40.0" layoutY="40.0" styleClass="car-glow">
+                    <ImageView fitHeight="70.0" fitWidth="120.0" preserveRatio="true">
+                        <image><Image url="@car.png" /></image>
+                    </ImageView>
+                </StackPane>
+            </children>
+        </Pane>
 
-    <VBox alignment="CENTER" spacing="5">
-        <ImageView fx:id="handGuideView" fitHeight="220.0" fitWidth="500.0" preserveRatio="true" />
+        <StackPane>
+            <TextFlow fx:id="targetTextFlow" maxWidth="1050" minHeight="150"
+                      style="-fx-background-color: rgba(0,0,0,0.5); -fx-padding: 20; -fx-background-radius: 15;"
+                      textAlignment="CENTER" />
+            <Label fx:id="comboLabel" opacity="0.0"
+                   style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #ffaa00; -fx-font-family: 'Courier New';"
+                   text="Combo!" translateY="-60" />
+        </StackPane>
+
+        <TextField fx:id="inputField" maxWidth="850.0" onKeyReleased="#handleTyping"
+                   prefHeight="70.0" styleClass="typing-input" />
+
+        <HBox alignment="CENTER" spacing="70.0">
+            <Label fx:id="wpmLabel"      styleClass="stat-text" text="WPM: 0" />
+            <Label fx:id="accuracyLabel" styleClass="stat-text" text="Accuracy: 100%" />
+            <Label fx:id="levelLabel"    styleClass="stat-text" text="Level: Manual Mode" />
+        </HBox>
+
+        <VBox alignment="CENTER" spacing="5">
+            <ImageView fx:id="handGuideView" fitHeight="220.0" fitWidth="500.0" preserveRatio="true" />
+        </VBox>
+
+        <HBox alignment="CENTER" spacing="20">
+            <Button onAction="#resetGame"   styleClass="btn-premium"    text="NEW RACE" />
+            <Button onAction="#goToProfile" styleClass="btn-signup"     text="VIEW PROFILE" />
+            <Button onAction="#menupage"    styleClass="btn-backtomenu" text="Menu" />
+        </HBox>
+
     </VBox>
 
-    <HBox alignment="CENTER" spacing="20">
-        <Button onAction="#resetGame" styleClass="btn-premium" text="NEW RACE" />
-        <Button onAction="#goToProfile" styleClass="btn-signup" text="VIEW PROFILE" />
-      <Button onAction="#menupage" styleClass="btn-backtomenu" text="Menu" />
-    </HBox>
-</VBox>
+    <VBox fx:id="tipToast" spacing="4"
+          style="-fx-background-color: #1a1f2e;
+                 -fx-background-radius: 12;
+                 -fx-border-color: #00E5FF;
+                 -fx-border-width: 1.5;
+                 -fx-border-radius: 12;
+                 -fx-padding: 10 16 10 14;"
+          AnchorPane.topAnchor="16"
+          AnchorPane.leftAnchor="16"
+          maxWidth="300"
+          visible="false"
+          managed="false">
+        <Label text="&#128161; PRO TIP"
+               style="-fx-text-fill: #00E5FF;
+                      -fx-font-size: 11px;
+                      -fx-font-family: 'System Bold';" />
+        <Label fx:id="tipLabel"
+               wrapText="true"
+               maxWidth="268"
+               style="-fx-text-fill: #cdd9e5;
+                      -fx-font-size: 13px;
+                      -fx-font-family: 'System';" />
+    </VBox>
+
+</AnchorPane>

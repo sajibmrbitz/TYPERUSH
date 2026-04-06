@@ -45,7 +45,7 @@ public class GameClient extends Thread {
                 } else if (input.startsWith("FINISH:")) {
                     listener.onRaceFinished(input.substring(7));
                 } else if (input.equals("LEAVE:")) {
-                    listener.onOpponentLeft(); // NEW: Handle opponent leaving
+                    listener.onOpponentLeft();
                     break;
                 }
             }
@@ -64,7 +64,6 @@ public class GameClient extends Thread {
         if (out != null) out.println("FINISH:" + winnerName);
     }
 
-    // NEW: Send the command out
     public void sendLeave() {
         if (out != null) out.println("LEAVE:");
     }

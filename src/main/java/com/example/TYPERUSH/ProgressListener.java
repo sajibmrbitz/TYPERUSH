@@ -5,6 +5,6 @@ public interface ProgressListener {
     void onOpponentStats(double progress, int wpm, int accuracy);
     void onRaceFinished(String winnerName);
     void onError(String message);
-    void onOpponentLeft(); // NEW: Tells the screen the other player left
+    void onOpponentLeft(); //  Tells the screen the other player left
     void onCountdownStart();
 }
