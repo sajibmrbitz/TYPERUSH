@@ -30,7 +30,7 @@
         <effect><GaussianBlur radius="100.0"/></effect>
     </StackPane>
 
-    <VBox alignment="CENTER" spacing="30.0"
+    <VBox alignment="CENTER" spacing="16.0"
           AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
 

@@ -40,7 +40,7 @@
                       textAlignment="CENTER" />
             <Label fx:id="comboLabel" opacity="0.0"
                    style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #ffaa00; -fx-font-family: 'Courier New';"
-                   text="Combo!" translateY="-60" />
+                   text="Combo!" translateY="-120" />
         </StackPane>
 
         <TextField fx:id="inputField" maxWidth="850.0" onKeyReleased="#handleTyping"

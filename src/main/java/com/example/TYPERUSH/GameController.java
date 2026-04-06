@@ -321,20 +321,13 @@ public class GameController extends BaseController {
         }
 
         comboLabel.setText(text);
-        comboLabel.setScaleX(0.2);
-        comboLabel.setScaleY(0.2);
-        comboLabel.setOpacity(0.0);
-
-        double targetScale = Math.min(1.6, 1.0 + (multiplier - 1) * 0.15);
-
-        ScaleTransition st = new ScaleTransition(Duration.millis(300), comboLabel);
-        st.setToX(targetScale);
-        st.setToY(targetScale);
+        comboLabel.setScaleX(1.0);
+        comboLabel.setScaleY(1.0);
 
         FadeTransition ftIn = new FadeTransition(Duration.millis(300), comboLabel);
         ftIn.setToValue(0.40);
 
-        ParallelTransition ptIn = new ParallelTransition(comboLabel, st, ftIn);
+        ParallelTransition ptIn = new ParallelTransition(comboLabel, ftIn);
 
         FadeTransition ftOut = new FadeTransition(Duration.millis(300), comboLabel);
         ftOut.setToValue(0.0);
