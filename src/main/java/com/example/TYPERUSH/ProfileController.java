@@ -1,5 +1,7 @@
 package com.example.TYPERUSH;
 
+import javafx.application.Platform;
+import javafx.scene.control.ScrollPane;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -69,11 +71,18 @@ public class ProfileController extends BaseController {
         dateCol.setSortType(TableColumn.SortType.ASCENDING);
         historyTable.getSortOrder().add(dateCol);
         historyTable.sort();
+        Platform.runLater(() -> {
+            ScrollPane sp = (ScrollPane) historyTable.getScene().lookup("ScrollPane");
+            if (sp != null) {
+                sp.getContent().setOnScroll(event -> {
+                    double deltaY = event.getDeltaY() * 3;
+                    double height = sp.getContent().getBoundsInLocal().getHeight();
+                    double vvalue = sp.getVvalue();
+                    sp.setVvalue(vvalue - deltaY / height);
+                });
+            }
+        });
     }
-
-    // ==========================================
-    // Graph Switching Logic
-    // ==========================================
     @FXML protected void showAccuracyGraph() {
         if (mainGraphContainer != null && accChart != null) {
             mainGraphContainer.getChildren().clear();
@@ -88,10 +97,7 @@ public class ProfileController extends BaseController {
         }
     }
 
-    // ==========================================
-    // Activity Map Logic
-    // ==========================================
-    private void buildActivityGrid(List<RaceResult> allResults) {
+     private void buildActivityGrid(List<RaceResult> allResults) {
         if (activityGridContainer == null) return;
         activityGridContainer.getChildren().clear();
 
@@ -101,7 +107,7 @@ public class ProfileController extends BaseController {
                 LocalDate d = LocalDate.parse(r.getDateTime().substring(0, 10));
                 dailyCounts.put(d, dailyCounts.getOrDefault(d, 0) + 1);
             } catch (Exception e) {
-                // ignore parsing errors
+
             }
         }
 
@@ -146,10 +152,7 @@ public class ProfileController extends BaseController {
         return Color.web("#e2b714");
     }
 
-    // ==========================================
-    // Statistics Calculation Logic
-    // ==========================================
-    private void calculateAndSetStats(List<RaceResult> results, boolean isAllTime) {
+     private void calculateAndSetStats(List<RaceResult> results, boolean isAllTime) {
         int lessons = results.size();
         double totalTime = 0;
         int topSpeed = 0, topAcc = 0;
@@ -186,11 +189,7 @@ public class ProfileController extends BaseController {
         int secs = (int) totalSeconds % 60;
         return String.format("%02d:%02d:%02d", hours, minutes, secs);
     }
-
-    // ==========================================
-    // Table and Data Loading Logic
-    // ==========================================
-    @FXML protected void showAllTimeData() { loadData(UserManager.getAllResults()); }
+   @FXML protected void showAllTimeData() { loadData(UserManager.getAllResults()); }
     @FXML protected void showTodayData() { loadData(UserManager.getTodaysResults()); }
 
     @FXML protected void sortByWPM() {
@@ -208,12 +207,12 @@ public class ProfileController extends BaseController {
     }
 
     private void setupCharts(ObservableList<RaceResult> data) {
-        // ১. Accuracy Chart
+
         CategoryAxis xAxisAcc = new CategoryAxis(); NumberAxis yAxisAcc = new NumberAxis(0, 100, 10);
         accChart = new LineChart<>(xAxisAcc, yAxisAcc);
         accChart.setLegendVisible(false); XYChart.Series<String, Number> accSeries = new XYChart.Series<>();
 
-        // ২. WPM Chart
+
         CategoryAxis xAxisWpm = new CategoryAxis(); NumberAxis yAxisWpm = new NumberAxis();
         wpmChart = new LineChart<>(xAxisWpm, yAxisWpm);
         wpmChart.setLegendVisible(false); XYChart.Series<String, Number> wpmSeries = new XYChart.Series<>();

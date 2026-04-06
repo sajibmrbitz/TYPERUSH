@@ -8,7 +8,7 @@ import java.net.InetAddress;
 public class MultiplayerController extends BaseController {
 
     @FXML private TextField ipInputField;
-    @FXML private TextField nameField;   // ← NEW: name input field
+    @FXML private TextField nameField;
     @FXML private Label statusLabel;
 
     @FXML
@@ -26,11 +26,11 @@ public class MultiplayerController extends BaseController {
         String name = nameField.getText().trim();
         if (name.isEmpty()) {
             nameField.setPromptText("⚠ Enter your name first!");
-            return; // ← don't proceed if name is empty
+            return;
         }
 
         GameSession.isHost = true;
-        GameSession.localPlayerName = name; // ← use typed name
+        GameSession.localPlayerName = name;
         switchScene("multiplayer-game-view.fxml", "TypeRush - Hosting Game");
     }
 
@@ -41,7 +41,7 @@ public class MultiplayerController extends BaseController {
 
         if (name.isEmpty()) {
             nameField.setPromptText("⚠ Enter your name first!");
-            return; // ← don't proceed if name is empty
+            return;
         }
         if (friendIP.isEmpty()) {
             return;
@@ -49,7 +49,7 @@ public class MultiplayerController extends BaseController {
 
         GameSession.isHost = false;
         GameSession.joinIp = friendIP;
-        GameSession.localPlayerName = name; // ← use typed name
+        GameSession.localPlayerName = name;
         switchScene("multiplayer-game-view.fxml", "TypeRush - Joining Game");
     }
 

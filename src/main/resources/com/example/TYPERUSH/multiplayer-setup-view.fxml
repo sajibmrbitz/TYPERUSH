@@ -15,10 +15,8 @@
         <Insets top="20" bottom="20" left="60" right="60"/>
     </padding>
 
-    <!-- TOP ROW: Name + IP + Rules -->
-    <HBox spacing="40" alignment="CENTER">
+   <HBox spacing="40" alignment="CENTER">
 
-        <!-- YOUR RACING NAME CARD -->
         <VBox alignment="CENTER" spacing="15" prefWidth="360" prefHeight="200"
               style="-fx-padding: 25;
                      -fx-border-color: #00E5FF;
@@ -44,7 +42,6 @@
                    style="-fx-text-fill: #444C56; -fx-font-size: 12;"/>
         </VBox>
 
-        <!-- YOUR IP ADDRESS CARD -->
         <VBox alignment="CENTER" spacing="15" prefWidth="360" prefHeight="200"
               style="-fx-padding: 25;
                      -fx-border-color: #E2B714;
@@ -80,10 +77,8 @@
 
     </HBox>
 
-    <!-- BOTTOM ROW: Host + Join Cards -->
     <HBox spacing="60" alignment="CENTER">
 
-        <!-- HOST CARD -->
         <VBox spacing="20" alignment="CENTER" prefWidth="550" prefHeight="260"
               style="-fx-padding: 30;
                      -fx-border-color: #00E5FF;
@@ -109,7 +104,6 @@
                    style="-fx-text-fill: #444C56; -fx-font-weight: bold; -fx-font-size: 16;"/>
         </VBox>
 
-        <!-- JOIN CARD -->
         <VBox spacing="15" alignment="CENTER" prefWidth="550" prefHeight="260"
               style="-fx-padding: 30;
                      -fx-border-color: #E2B714;
@@ -147,7 +141,6 @@
 
     </HBox>
 
-    <!-- BACK BUTTON -->
     <VBox alignment="CENTER">
         <Button mnemonicParsing="false" onAction="#backToMenu"
                 text="← ABORT TO MENU"

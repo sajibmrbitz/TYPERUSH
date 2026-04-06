@@ -1,16 +1,19 @@
 package com.example.TYPERUSH;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.animation.ScaleTransition;
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
 import javafx.animation.ParallelTransition;
+import javafx.animation.PauseTransition;
+import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.animation.Transition;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.TextFlow;
@@ -19,9 +22,12 @@ import java.io.InputStream;
 import java.util.Random;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import javafx.scene.layout.HBox;
 
 public class GameController extends BaseController {
+
     @FXML private Label wpmLabel, accuracyLabel, levelLabel;
     @FXML private TextFlow targetTextFlow;
     @FXML private TextField inputField;
@@ -29,6 +35,8 @@ public class GameController extends BaseController {
     @FXML private Pane raceTrackContainer;
     @FXML private ImageView handGuideView;
     @FXML private Label comboLabel;
+    @FXML private VBox tipToast;
+    @FXML private Label tipLabel;
 
     private static String selectedDifficulty = "NORMAL";
     private static boolean isTutorMode = false;
@@ -36,6 +44,26 @@ public class GameController extends BaseController {
     public static void setTutorMode(boolean value) {
         isTutorMode = value;
     }
+
+    private final String[] TIP_BANK = {
+            "Keep your wrists flat and fingers curved over the home row keys.",
+            "Use your pinky finger for Shift, not your ring finger.",
+            "Don't look at the keyboard — trust your muscle memory!",
+            "Home row: A S D F (left hand) and J K L ; (right hand). Always return here.",
+            "Hit the space bar with your thumb, alternating between hands.",
+            "Slow down to type accurately — speed follows accuracy naturally.",
+            "Practice difficult keys in isolation before tackling full sentences.",
+            "Keep a light touch — pressing hard actually slows you down.",
+            "Breathe steadily while typing; tension kills your rhythm.",
+            "Use ALL fingers — never let one finger do another finger's job.",
+            "Backspace is the enemy of WPM — aim for zero corrections.",
+            "Your ring and pinky fingers are the weakest — train them daily.",
+            "Try to read 2-3 words ahead of what you are currently typing.",
+            "Good posture means better typing: sit straight, feet flat on floor.",
+            "Consistency beats bursts — a steady 60 WPM beats erratic 80 WPM."
+    };
+    private List<String> tipQueue = new ArrayList<>();
+    private Timeline tipTimer;
 
     private final String[] beginnerBank = {
             "osman bin hadi is a symbol of resistance and youth spirit in our country who was unfortunately killed just before the National Parliament Election and Referendum.",
@@ -51,7 +79,6 @@ public class GameController extends BaseController {
             "In two thousand and eighteen, the 'Safe Street Movement' taught us how school children can lead a nation towards better discipline.",
             "Academic pressure of BUET is no joke; balancing lab reports and term finals is a constant struggle for us."
     };
-
     private final String[] proBank = {
             "Martyr Osman Bin Hadi (a young visionary) was an MP candidate from Dhaka 8, where he along with his fellow workers from Inkilab Manch conducted his election campaign in a quite simple way.",
             "The 'July Revolution' of 2024 was a massive shift for our political sector, and it took out the corrupt, fascist government from power.",
@@ -86,6 +113,7 @@ public class GameController extends BaseController {
         }
 
         resetGame();
+        startTipTimer();
     }
 
     public void resetGame() {
@@ -94,6 +122,7 @@ public class GameController extends BaseController {
             comboLabel.setOpacity(0.0);
         }
         stopWpmTimer();
+        stopTipTimer();
         previousInputLength = 0;
         totalKeyStrokes = 0;
         correctKeyStrokes = 0;
@@ -140,6 +169,7 @@ public class GameController extends BaseController {
         wpmLabel.setText("WPM: 0");
         accuracyLabel.setText("Accuracy: 100%");
         updateHandGuide(currentText.charAt(0));
+        startTipTimer(); // NEW
     }
 
     @FXML protected void handleTyping() {
@@ -167,7 +197,7 @@ public class GameController extends BaseController {
             if (typedChar == targetChar) {
                 SoundManager.getInstance().playCorrect();
                 consecutiveCorrectPresss++;
-                
+
                 if (consecutiveCorrectPresss > 0 && consecutiveCorrectPresss % 5 == 0) {
                     int multiplier = (consecutiveCorrectPresss / 5) + 1;
                     comboLabel.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #e2b714; -fx-font-family: 'Courier New';");
@@ -244,7 +274,7 @@ public class GameController extends BaseController {
             InputStream is = getClass().getResourceAsStream("hands/" + ascii + ".png");
             if (is != null) handGuideView.setImage(new Image(is));
         } catch (Exception e) {
-            // nothing
+
         }
     }
 
@@ -294,16 +324,16 @@ public class GameController extends BaseController {
         comboLabel.setScaleX(0.2);
         comboLabel.setScaleY(0.2);
         comboLabel.setOpacity(0.0);
-        
+
         double targetScale = Math.min(1.6, 1.0 + (multiplier - 1) * 0.15);
-        
+
         ScaleTransition st = new ScaleTransition(Duration.millis(300), comboLabel);
         st.setToX(targetScale);
         st.setToY(targetScale);
-        
+
         FadeTransition ftIn = new FadeTransition(Duration.millis(300), comboLabel);
         ftIn.setToValue(0.40);
-        
+
         ParallelTransition ptIn = new ParallelTransition(comboLabel, st, ftIn);
 
         FadeTransition ftOut = new FadeTransition(Duration.millis(300), comboLabel);
@@ -325,6 +355,58 @@ public class GameController extends BaseController {
             ft.play();
             currentComboAnim = ft;
         }
+    }
+
+    // show tips
+    private void startTipTimer() {
+        stopTipTimer();
+        PauseTransition initialDelay = new PauseTransition(Duration.seconds(3));
+        initialDelay.setOnFinished(e -> {
+            showNextTip();
+
+            tipTimer = new Timeline(new KeyFrame(Duration.seconds(15.6), ev -> showNextTip()));
+            tipTimer.setCycleCount(Timeline.INDEFINITE);
+            tipTimer.play();
+        });
+        initialDelay.play();
+    }
+
+    private void stopTipTimer() {
+        if (tipTimer != null) {
+            tipTimer.stop();
+            tipTimer = null;
+        }
+    }
+
+    private void showNextTip() {
+        if (tipQueue.isEmpty()) {
+            tipQueue = new ArrayList<>(Arrays.asList(TIP_BANK));
+            Collections.shuffle(tipQueue);
+        }
+        tipLabel.setText(tipQueue.remove(0));
+
+        tipToast.setVisible(true);
+        tipToast.setManaged(true);
+        tipToast.setOpacity(0);
+        tipToast.setTranslateX(-320);
+
+        TranslateTransition slideIn = new TranslateTransition(Duration.millis(420), tipToast);
+        slideIn.setToX(0);
+
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(420), tipToast);
+        fadeIn.setToValue(1.0);
+
+        ParallelTransition enter = new ParallelTransition(slideIn, fadeIn);
+        PauseTransition hold = new PauseTransition(Duration.seconds(10));
+
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(600), tipToast);
+        fadeOut.setToValue(0.0);
+        fadeOut.setOnFinished(e -> {
+            tipToast.setVisible(false);
+            tipToast.setManaged(false);
+        });
+
+        new SequentialTransition(enter, hold, fadeOut).play();
     }
 
     @FXML protected void goToProfile() { switchScene("profile-view.fxml", "User Profile"); }

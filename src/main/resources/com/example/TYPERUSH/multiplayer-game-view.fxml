@@ -21,6 +21,9 @@
             <Label fx:id="myNameLabel" styleClass="stat-text" text="YOU" textFill="#00e5ff"/>
             <Label fx:id="wpmLabel" styleClass="stat-text" text="WPM: 0" />
             <Label fx:id="accuracyLabel" styleClass="stat-text" text="Accuracy: 100%" />
+            <Label fx:id="timerLabel"
+                   style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #00E5FF;"
+                   text="2:30" />
         </HBox>
 
         <Pane prefHeight="100.0" prefWidth="1200.0" styleClass="race-track"
@@ -61,6 +64,23 @@
         <Button onAction="#leaveMatch" styleClass="btn-backtomenu" text="LEAVE MATCH" />
 
     </VBox>
+
+    <StackPane fx:id="freezeWarning" visible="false"
+               mouseTransparent="true"
+               style="-fx-background-color: transparent;">
+        <VBox alignment="CENTER" spacing="6"
+              style="-fx-background-color: rgba(255,50,50,0.92);
+                     -fx-background-radius: 10;
+                     -fx-padding: 10 20 10 20;
+                     -fx-max-width: 420;
+                     -fx-max-height: 70;"
+              VBox.vgrow="NEVER">
+            <Label text="&#9888; Input Frozen!"
+                   style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            <Label text="10 wrong characters! Use Backspace to fix errors."
+                   style="-fx-font-size: 12px; -fx-text-fill: #ffe0e0;"/>
+        </VBox>
+    </StackPane>
 
     <!-- RESULT OVERLAY — hidden until race ends -->
     <StackPane fx:id="resultOverlay" visible="false"
