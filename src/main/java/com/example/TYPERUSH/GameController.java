@@ -75,16 +75,16 @@ public class GameController extends BaseController {
     private final String[] intermediateBank = {
             "Martyr Osman Bin Hadi dreamt of a new Bangladesh and he had to sacrifice his life for it.",
             "The July revolution in BD proved that when students stand together, they can change the entire history.",
-            "The Pilkhana tragedy of BDR remains one of the darkest chapters in our history, where many frontline and junior army officers were killed.",
+            "The Pilkhana tragedy of BDR endures as one of the bleakest episodes in our history, marked by the loss of numerous frontline and junior military officers.",
             "In two thousand and eighteen, the 'Safe Street Movement' taught us how school children can lead a nation towards better discipline.",
             "Academic pressure of BUET is no joke; balancing lab reports and term finals is a constant struggle for us."
     };
     private final String[] proBank = {
             "Martyr Osman Bin Hadi (a young visionary) was an MP candidate from Dhaka 8, where he along with his fellow workers from Inkilab Manch conducted his election campaign in a quite simple way.",
-            "The 'July Revolution' of 2024 was a massive shift for our political sector, and it took out the corrupt, fascist government from power.",
+            "The 'July Revolution' marked a profound political upheaval, displacing an entrenched authoritarian regime marked by corruption.",
             "Pilkhana Tragedy, a dark chapter in the history of Bangladesh, unfortunately doesn't get the attention it deserves as far as the investigation is considered.",
             "The 'Safe Street Movement', initiated by some school students, raised a massive awareness about road safety and traffic laws in Dhaka city.",
-            "Surviving each semester in BUET requires a student to solve O(n!) puzzles, with more than 30 hours worktime required for 1.5 credit sessional courses."
+            "Enduring every academic term at BUET compels a learner to confront factorially escalating intellectual conundrums, while devoting an exorbitant expanse of laborious hours to sessional undertakings of modest academic weight."
     };
 
     private String currentText;

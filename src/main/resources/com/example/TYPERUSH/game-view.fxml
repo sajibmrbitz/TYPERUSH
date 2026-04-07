@@ -11,14 +11,29 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
+<?import javafx.scene.effect.GaussianBlur?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.TYPERUSH.GameController"
             style="-fx-background-color: #272823;">
 
+
+    <StackPane layoutX="1250.0" layoutY="-80.0" prefHeight="400.0" prefWidth="400.0"
+               style="-fx-background-color: #00E5FF; -fx-background-radius: 500; -fx-opacity: 0.07;"
+               mouseTransparent="true">
+        <effect><GaussianBlur radius="120.0"/></effect>
+    </StackPane>
+
+
+    <StackPane layoutX="-80.0" layoutY="500.0" prefHeight="350.0" prefWidth="350.0"
+               style="-fx-background-color: #0066FF; -fx-background-radius: 500; -fx-opacity: 0.07;"
+               mouseTransparent="true">
+        <effect><GaussianBlur radius="110.0"/></effect>
+    </StackPane>
+
     <VBox alignment="TOP_CENTER" spacing="20.0"
-          style="-fx-background-color: #272823; -fx-padding: 140 20 20 20;"
+          style="-fx-background-color: transparent; -fx-padding: 140 20 20 20;"
           styleClass="game-root"
           AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
           AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
