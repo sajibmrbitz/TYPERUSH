@@ -117,13 +117,12 @@
                               style="-fx-background-color: rgba(22,27,34,0.85); -fx-border-color: #00E5FF; -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-text-fill: #00E5FF; -fx-padding: 6 18; -fx-cursor: hand;"/>
             </HBox>
 
-            <!-- GRAPH CONTAINER -->
             <StackPane fx:id="mainGraphContainer" prefHeight="350.0" maxWidth="1100.0"
                        style="-fx-border-color: #333333; -fx-border-width: 1; -fx-border-radius: 8; -fx-background-color: rgba(22,27,34,0.85); -fx-background-radius: 8; -fx-padding: 10;">
                 <Label text="Graph Loading..." style="-fx-text-fill: #555555;"/>
             </StackPane>
 
-            <!-- HISTORY TABLE -->
+
             <TableView fx:id="historyTable" maxWidth="1100" prefHeight="300.0"
                        style="-fx-background-color: transparent; -fx-border-color: #333333; -fx-border-width: 1;">    <columns>
                     <TableColumn fx:id="dateCol" prefWidth="250" text="Date &amp; Time"/>

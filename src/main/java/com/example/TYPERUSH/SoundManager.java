@@ -57,7 +57,7 @@ public class SoundManager {
     public void playFinish() {
         if (finishSound != null) {
             finishSound.setVolume(1.0);     // max volume
-            finishSound.play();
+         //   finishSound.play();
         }
     }
 }
