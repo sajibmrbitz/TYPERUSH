@@ -15,7 +15,7 @@ PLease follow this link to go to the release.
 ## Key Features
 * **Real-Time Multiplayer Race:** Host a server or join via IP to compete in a live typing showdown.
 * **Live Progress Tracking:** See your car and your opponent's car move in real-time based on typing progress.
-* **Dynamic Combo Multiplier:** Type words accurately without backspaces to trigger 🔥 visual combo streaks (x2, x3, GODLIKE!).
+* **Dynamic Combo Multiplier:** Type words accurately without backspaces to trigger visual combo streaks (x2, x3).
 * **Detailed Analytics Dashboard:** Track your All-Time stats and Today's History. Includes graphical charts to visualize your WPM (Words Per Minute) and Accuracy over time.
 * **Match Results Overlay:** Immediate post-match statistics showing who won, with exact WPM and Accuracy percentages.
 
