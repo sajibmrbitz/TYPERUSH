@@ -7,11 +7,12 @@
 TypeRush is a highly competitive, real-time multiplayer typing game built with **Java** and **JavaFX**. Challenge your friends, race against them live, and track your typing speed and accuracy through a detailed statistics dashboard.
 
 ### 🎮 [Download the Latest Game (.exe)](https://github.com/sajibmrbitz/TYPERUSH/releases/tag/v1.0.0))
+PLease follow this link to go to the release.
 *(No Java installation required! The game comes bundled with its own JRE. Just download the Zip, extract, and play!)*
 
 ---
 
-## ✨ Key Features
+## Key Features
 * **Real-Time Multiplayer Race:** Host a server or join via IP to compete in a live typing showdown.
 * **Live Progress Tracking:** See your car and your opponent's car move in real-time based on typing progress.
 * **Dynamic Combo Multiplier:** Type words accurately without backspaces to trigger 🔥 visual combo streaks (x2, x3, GODLIKE!).
@@ -20,26 +21,14 @@ TypeRush is a highly competitive, real-time multiplayer typing game built with *
 
 ---
 
-## 🛠️ Tech Stack & Concepts Used
-* **Language:** Java 17
-* **GUI Framework:** JavaFX
-* **Networking:** Java Socket Programming (TCP/IP) for real-time client-server communication
-* **Data Management:** File I/O for saving/loading local user profiles, game history, and dashboard statistics
-* **Build Tool:** Maven (maven-shade-plugin for Fat JAR bundling)
+## Installation & How to Play
 
----
+You don't need to install Java or any IDE to play this game! It comes bundled with its own runtime environment.
 
-## 👨‍💻 How to Run from Source (For Developers)
-If you want to clone the repository and run the code directly:
+### Step-by-Step Guide:
+1. **Download the Game:** Go to the [Releases page](https://github.com/YOUR_USERNAME/TYPERUSH/releases/latest) and download the `TypeRush_Release.zip` file.
+2. **Extract:** Unzip/extract the downloaded folder anywhere on your Windows PC.
+3. **Play:** Open the extracted folder and double-click on `TypeRush.exe`. 
 
-1. Clone the repository:
-   
-   git clone [https://github.com/sajibmrbitz/TYPERUSH.git](https://github.com/sajibmrbitz/TYPERUSH.git)
+*(Note: Ensure that the `jre` folder remains in the same directory as the `.exe` file for the game to run properly).*
 
-2.Navigate to the project directory:
-
-  cd TYPERUSH
-  
-3.Build and Run using Maven Wrapper:
-
-  ./mvnw clean javafx:run
