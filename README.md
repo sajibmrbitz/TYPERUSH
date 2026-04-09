@@ -6,7 +6,7 @@
 
 TypeRush is a highly competitive, real-time multiplayer typing game built with **Java** and **JavaFX**. Challenge your friends, race against them live, and track your typing speed and accuracy through a detailed statistics dashboard.
 
-### 🎮 [Download the Latest Game (.exe)](https://github.com/sajibmrbitz/TYPERUSH/releases/tag/v1.0.0))
+### 🎮 [Download the Latest Game (.exe)](https://github.com/sajibmrbitz/TYPERUSH/releases/tag/v1.0.0)
 PLease follow this link to go to the release.
 *(No Java installation required! The game comes bundled with its own JRE. Just download the Zip, extract, and play!)*
 
