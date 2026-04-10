@@ -6,6 +6,7 @@
 
 A competitive, real-time multiplayer typing game built with **JavaFX** and **Socket Programming**, designed for racing against friends, tracking typing speed, and improving accuracy — all from a single, fast, and responsive desktop application.
 
+
 ---
 
 ## 📋 Table of Contents
@@ -88,11 +89,16 @@ If you want to run the project directly from the code (For Developers):
 
 ### Steps
 1. Clone the repository:
-   `git clone https://github.com/sajibmrbitz/TYPERUSH.git`
+   
+       git clone https://github.com/sajibmrbitz/TYPERUSH.git
+
 2. Navigate to the directory:
-   `cd TYPERUSH`
+   
+       cd TYPERUSH
+
 3. Run using Maven:
-   `./mvnw clean javafx:run`
+   
+       ./mvnw clean javafx:run
 
 ---
 
@@ -102,11 +108,11 @@ Follow these steps to build the professional Windows `.exe` installer from scrat
 
 ### Prerequisites
 
-1. **JDK 17 or higher** (Verify: `java -version`)
-2. **Maven 3.8+** (Verify: `mvn -version`)
+1. **JDK 17 or higher** Download from: https://adoptium.net (Verify: `java -version`)
+2. **Maven 3.8+** Download from: https://maven.apache.org/download.cgi (Verify: `mvn -version`)
    * **Important (Set Environment Variable):** After extracting Maven, you must add its `bin` folder path to your Windows Environment Variables.
    * *How to do it:* Search for "Environment Variables" in Windows Start menu ➔ Click "Edit the system environment variables" ➔ Click "Environment Variables" ➔ Under System variables, find and select `Path` ➔ Click "Edit" ➔ Click "New" and paste the path to your Maven `bin` folder (e.g., `C:\apache-maven-3.9.6\bin`) ➔ Click OK on all windows. Restart your terminal.
-3. **WiX Toolset v3** (Required by jpackage. Install and **restart your PC**).
+3. **WiX Toolset v3** Download from: https://wixtoolset.org/releases (Required by jpackage to build .exe. Install it, then **restart your PC**).
 
 ### Step 1 — Add the jpackage plugin to pom.xml
 Add this inside `<build><plugins>` in your `pom.xml`:
@@ -129,13 +135,17 @@ Add this inside `<build><plugins>` in your `pom.xml`:
         </configuration>
     </plugin>
 
+> ⚠️ Change `<mainJar>` to match the actual JAR name in your `target/` folder after building.
+
 ### Step 2 — Build the project
 Open terminal in the project root and run:
-`mvn clean package`
+
+    mvn clean package
 
 ### Step 3 — Generate the EXE installer
 Run the following command:
-`mvn jpackage:jpackage`
+
+    mvn jpackage:jpackage
 
 ### Step 4 — Install the app
 Go to `target/installer/` and double-click **`TypeRush-1.0.0.exe`** to install the game on your system with a desktop shortcut.
