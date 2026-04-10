@@ -108,13 +108,12 @@ public class MultiplayerGameController extends BaseController implements Progres
             return;
         }
 
-        // FIX 1: If frozen and the user is NOT backspacing (input didn't shrink),
-        // block all further processing — prevents false finish via wrong chars.
+
         if (isFrozen && inputLength >= previousInputLength) {
             return;
         }
 
-        // Sound on new character
+
         if (inputLength > previousInputLength && inputLength <= currentText.length()) {
             char typed  = input.charAt(inputLength - 1);
             char target = currentText.charAt(inputLength - 1);
@@ -134,7 +133,7 @@ public class MultiplayerGameController extends BaseController implements Progres
 
         totalKeyStrokes++;
 
-        // Original hasError prefix logic — once one char is wrong, all following go red
+
         int prefixMatch = 0;
         int redCount    = 0;
         boolean hasError = false;
@@ -425,5 +424,6 @@ public class MultiplayerGameController extends BaseController implements Progres
                 switchScene("menu-view.fxml", "TypeRush - Menu");
             });
         }).start();
+
     }
 }
