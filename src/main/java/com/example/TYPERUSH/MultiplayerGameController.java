@@ -45,9 +45,9 @@ public class MultiplayerGameController extends BaseController implements Progres
     private int lastAcc           = 100;
     private int previousInputLength = 0;
 
-     private int wrongCharCount = 0;
+    private int wrongCharCount = 0;
 
-    private double myProgress     = 0.0;
+    private double myProgress       = 0.0;
     private double opponentProgress = 0.0;
 
     private Timeline wpmTimer;
@@ -61,10 +61,11 @@ public class MultiplayerGameController extends BaseController implements Progres
         myNameLabel.setText(GameSession.localPlayerName);
         updateTimerLabel(MATCH_SECONDS);
 
+        // Key filter: when frozen only allow Backspace/Delete through
         inputField.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
             if (isFrozen) {
                 if (event.getCode() != KeyCode.BACK_SPACE && event.getCode() != KeyCode.DELETE) {
-                    event.consume();   // block everything except backspace
+                    event.consume();
                 }
             }
         });
@@ -91,6 +92,7 @@ public class MultiplayerGameController extends BaseController implements Progres
         String input    = inputField.getText();
         int inputLength = input.length();
 
+        // Hard cap
         if (inputLength > currentText.length()) {
             inputField.setText(input.substring(0, currentText.length()));
             inputField.positionCaret(currentText.length());
@@ -106,6 +108,13 @@ public class MultiplayerGameController extends BaseController implements Progres
             return;
         }
 
+        // FIX 1: If frozen and the user is NOT backspacing (input didn't shrink),
+        // block all further processing — prevents false finish via wrong chars.
+        if (isFrozen && inputLength >= previousInputLength) {
+            return;
+        }
+
+        // Sound on new character
         if (inputLength > previousInputLength && inputLength <= currentText.length()) {
             char typed  = input.charAt(inputLength - 1);
             char target = currentText.charAt(inputLength - 1);
@@ -116,7 +125,8 @@ public class MultiplayerGameController extends BaseController implements Progres
             }
         }
         previousInputLength = inputLength;
-    if (!isRunning && inputLength > 0) {
+
+        if (!isRunning && inputLength > 0) {
             startTime = System.currentTimeMillis();
             isRunning = true;
             startWpmTimer();
@@ -124,6 +134,7 @@ public class MultiplayerGameController extends BaseController implements Progres
 
         totalKeyStrokes++;
 
+        // Original hasError prefix logic — once one char is wrong, all following go red
         int prefixMatch = 0;
         int redCount    = 0;
         boolean hasError = false;
@@ -169,7 +180,8 @@ public class MultiplayerGameController extends BaseController implements Progres
 
         GameSession.sendStats(myProgress, lastWpm, lastAcc);
 
-        if (inputLength >= currentText.length() && !isRaceFinished) {
+        // FIX 2: Only finish when ALL text is correctly typed (no wrong chars remaining)
+        if (inputLength >= currentText.length() && wrongCharCount == 0 && !isRaceFinished) {
             isRaceFinished = true;
             stopWpmTimer();
             stopMatchTimer();
