@@ -14,9 +14,11 @@ A competitive, real-time multiplayer typing game built with **JavaFX** and **Soc
 - [Benefits](#benefits)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
-- [Installation Guide (exe)](#installation-guide-exe)
+- [Manual Installation Guide (Build EXE)](#manual-installation-guide-build-exe)
+- [Quick Play (Download Release)](#quick-play-download-release)
 - [Running from Source](#running-from-source)
 - [Project Structure](#project-structure)
+- [License](#license)
 
 ---
 
@@ -62,13 +64,79 @@ TypeRush is a highly competitive typing game that allows players to host or join
 | UI Framework | JavaFX |
 | Networking | Java Sockets (TCP/IP) |
 | Build Tool | Maven |
-| Packaging | maven-shade-plugin (Fat JAR), Launch4j (.exe wrapper) |
+| Packaging | maven-shade-plugin, Launch4j, jpackage |
 
 ---
 
-## 📦 Installation Guide (EXE)
+## 📦 Manual Installation Guide (Build EXE)
 
-You don't need to install Java or any IDE to play this game! It comes bundled with its own runtime environment.
+Follow these steps to build and install TypeRush as a Windows `.exe` directly from the source code.
+
+### Prerequisites
+
+Make sure you have the following installed:
+
+1. **JDK 17 or higher** Download from: [https://adoptium.net](https://adoptium.net) After installing, verify: `java -version`
+2. **Maven 3.8+** Download from: [https://maven.apache.org/download.cgi](https://maven.apache.org/download.cgi) After installing, verify: `mvn -version`
+3. **WiX Toolset v3** *(required by jpackage to build .exe)* Download from: [https://wixtoolset.org/releases](https://wixtoolset.org/releases) Install it, then **restart your PC** so it's added to PATH.
+
+### Step 1 — Add the jpackage plugin to pom.xml
+
+Open your `pom.xml` and add this inside `<build><plugins>`:
+
+    <plugin>
+        <groupId>org.panteleyev</groupId>
+        <artifactId>jpackage-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <configuration>
+            <name>TypeRush</name>
+            <appVersion>1.0.0</appVersion>
+            <vendor>Sajib</vendor>
+            <mainClass>com.example.TYPERUSH.Launcher</mainClass>
+            <mainJar>TYPERUSH-1.0-SNAPSHOT.jar</mainJar>
+            <type>EXE</type>
+            <winDirChooser>true</winDirChooser>
+            <winShortcut>true</winShortcut>
+            <winMenu>true</winMenu>
+            <destination>target/installer</destination>
+        </configuration>
+    </plugin>
+
+> ⚠️ Change `<mainJar>` to match the actual JAR name in your `target/` folder after building.
+
+### Step 2 — Build the project
+
+Open a terminal in your project root folder and run:
+
+    mvn clean package
+
+This compiles everything and produces a JAR in the `target/` folder.
+
+### Step 3 — Generate the EXE installer
+
+    mvn jpackage:jpackage
+
+This will create the installer at:
+
+    target/installer/TypeRush-1.0.0.exe
+
+### Step 4 — Install the app
+
+1. Double-click `TypeRush-1.0.0.exe`
+2. Follow the installer wizard
+3. Choose installation directory
+4. A desktop shortcut and Start Menu entry will be created automatically
+5. Launch **TypeRush** from the desktop or Start Menu
+
+### Step 5 — First Launch
+
+On first launch, the app will automatically generate local files in the installation directory to save your user profile, race history, and dashboard statistics locally.
+
+---
+
+## 🎮 Quick Play (Download Release)
+
+You don't need to install Java, compile code, or use IDEs to play this game! It comes bundled with its own runtime environment.
 
 ### Step-by-Step Guide:
 
@@ -127,6 +195,7 @@ If you want to run the project directly without building an EXE (For Developers)
 
 ---
 
-**Happy Gaming!!!**
-Free to use for educational purposes.
+## 📄 License
 
+This project was developed as part of an academic project at **BUET (Bangladesh University of Engineering and Technology)**. 
+Free to use for educational purposes.
