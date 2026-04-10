@@ -131,6 +131,3 @@ If you want to run the project directly without building an EXE (For Developers)
 **Happy Gaming!!!**
 Free to use for educational purposes.
 
----
-
-*Built with ❤️ by Mahmodur Rahman Sajib (Student ID: 2405129)*
