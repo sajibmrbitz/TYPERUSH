@@ -17,7 +17,6 @@ A competitive, real-time multiplayer typing game built with **JavaFX** and **Soc
 - [Installation Guide (exe)](#installation-guide-exe)
 - [Running from Source](#running-from-source)
 - [Project Structure](#project-structure)
-- [License](#license)
 
 ---
 
