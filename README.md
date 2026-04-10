@@ -14,9 +14,9 @@ A competitive, real-time multiplayer typing game built with **JavaFX** and **Soc
 - [Benefits](#benefits)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
-- [Manual Installation Guide (Build EXE)](#manual-installation-guide-build-exe)
-- [Quick Play (Download Release)](#quick-play-download-release)
-- [Running from Source](#running-from-source)
+- [1. Quick Play (Download Release)](#1-quick-play-download-release)
+- [2. Running from Source](#2-running-from-source)
+- [3. Manual Installation Guide (Build EXE)](#3-manual-installation-guide-build-exe)
 - [Project Structure](#project-structure)
 - [License](#license)
 
@@ -33,7 +33,6 @@ TypeRush is a highly competitive typing game that allows players to host or join
 - **Real-Time Competition** — Race against friends live via IP connection.
 - **Immediate Feedback** — See your WPM, accuracy, and progress update instantly as you type.
 - **Skill Tracking** — Detailed statistics dashboard to monitor your long-term improvement.
-- **No Installation Required** — Ships as a standalone executable with a bundled JRE; just unzip and play.
 - **Engaging Visuals** — Dynamic combo streaks and smooth animations keep the gameplay exciting.
 - **Lightweight** — Minimal system requirements, fast startup.
 
@@ -43,15 +42,13 @@ TypeRush is a highly competitive typing game that allows players to host or join
 
 ### 🏁 Core Gameplay
 - **Real-Time Multiplayer Race:** Host a game server or join a friend's IP to compete in a live typing showdown.
-- **Live Progress Tracking:** Visual representation (e.g., cars racing) of your progress compared to your opponent in real-time.
-- **Dynamic Combo Multiplier:** Type words accurately without backspaces to trigger awesome visual combo streaks (x2, x3, GODLIKE!).
-- **Immediate Validation:** Keystrokes are validated instantly, with visual color-coding for correct and incorrect inputs.
-- **Match Results Overlay:** Immediate post-match statistics showing who won, with exact WPM (Words Per Minute) and Accuracy percentages.
+- **Live Progress Tracking:** Visual cars racing on screen based on your progress.
+- **Dynamic Combo Multiplier:** Accuracy-based 🔥 visual combo streaks (x2, x3, GODLIKE!).
+- **Match Results Overlay:** Immediate post-match statistics showing WPM and Accuracy percentages.
 
 ### 📊 Dashboard & Analytics
-- **All-Time Statistics:** Track your total races, highest WPM, and average accuracy across all sessions.
-- **Today's History:** View a detailed breakdown of your performance for the current day.
-- **Graphical Visualization:** Interactive charts plotting your WPM and Accuracy trends over time to visualize improvement.
+- **All-Time Statistics:** Track total races, highest WPM, and average accuracy.
+- **Graphical Visualization:** Interactive charts plotting your performance trends.
 - **Local Data Persistence:** Game history and user profiles are saved locally.
 
 ---
@@ -64,25 +61,55 @@ TypeRush is a highly competitive typing game that allows players to host or join
 | UI Framework | JavaFX |
 | Networking | Java Sockets (TCP/IP) |
 | Build Tool | Maven |
-| Packaging | maven-shade-plugin, Launch4j, jpackage |
+| Packaging | jpackage, WiX Toolset, Launch4j |
 
 ---
 
-## 📦 Manual Installation Guide (Build EXE)
+## 1. Quick Play (Download Release)
 
-Follow these steps to build and install TypeRush as a Windows `.exe` directly from the source code.
+You don't need to install Java or compile any code to play this version!
+
+### Step-by-Step Guide:
+1. **Download the Game:** Go to the [Releases page](https://github.com/sajibmrbitz/TYPERUSH/releases/latest) and download `TypeRush_Release.zip`.
+2. **Extract:** Unzip/extract the downloaded folder anywhere on your Windows PC.
+3. **Play:** Open the extracted folder and double-click on **`TypeRush.exe`**. 
+
+*(Note: The game comes bundled with its own JRE, so it runs without pre-installed Java).*
+
+---
+
+## 2. Running from Source
+
+If you want to run the project directly from the code (For Developers):
+
+### Prerequisites
+- JDK 17 installed
+- Git installed
+
+### Steps
+1. Clone the repository:
+   `git clone https://github.com/sajibmrbitz/TYPERUSH.git`
+2. Navigate to the directory:
+   `cd TYPERUSH`
+3. Run using Maven:
+   `./mvnw clean javafx:run`
+
+---
+
+## 3. Manual Installation Guide (Build EXE)
+
+Follow these steps to build the professional Windows `.exe` installer from scratch.
 
 ### Prerequisites
 
-Make sure you have the following installed:
-
-1. **JDK 17 or higher** Download from: [https://adoptium.net](https://adoptium.net) After installing, verify: `java -version`
-2. **Maven 3.8+** Download from: [https://maven.apache.org/download.cgi](https://maven.apache.org/download.cgi) After installing, verify: `mvn -version`
-3. **WiX Toolset v3** *(required by jpackage to build .exe)* Download from: [https://wixtoolset.org/releases](https://wixtoolset.org/releases) Install it, then **restart your PC** so it's added to PATH.
+1. **JDK 17 or higher** (Verify: `java -version`)
+2. **Maven 3.8+** (Verify: `mvn -version`)
+   * **Important (Set Environment Variable):** After extracting Maven, you must add its `bin` folder path to your Windows Environment Variables.
+   * *How to do it:* Search for "Environment Variables" in Windows Start menu ➔ Click "Edit the system environment variables" ➔ Click "Environment Variables" ➔ Under System variables, find and select `Path` ➔ Click "Edit" ➔ Click "New" and paste the path to your Maven `bin` folder (e.g., `C:\apache-maven-3.9.6\bin`) ➔ Click OK on all windows. Restart your terminal.
+3. **WiX Toolset v3** (Required by jpackage. Install and **restart your PC**).
 
 ### Step 1 — Add the jpackage plugin to pom.xml
-
-Open your `pom.xml` and add this inside `<build><plugins>`:
+Add this inside `<build><plugins>` in your `pom.xml`:
 
     <plugin>
         <groupId>org.panteleyev</groupId>
@@ -102,73 +129,16 @@ Open your `pom.xml` and add this inside `<build><plugins>`:
         </configuration>
     </plugin>
 
-> ⚠️ Change `<mainJar>` to match the actual JAR name in your `target/` folder after building.
-
 ### Step 2 — Build the project
-
-Open a terminal in your project root folder and run:
-
-    mvn clean package
-
-This compiles everything and produces a JAR in the `target/` folder.
+Open terminal in the project root and run:
+`mvn clean package`
 
 ### Step 3 — Generate the EXE installer
-
-    mvn jpackage:jpackage
-
-This will create the installer at:
-
-    target/installer/TypeRush-1.0.0.exe
+Run the following command:
+`mvn jpackage:jpackage`
 
 ### Step 4 — Install the app
-
-1. Double-click `TypeRush-1.0.0.exe`
-2. Follow the installer wizard
-3. Choose installation directory
-4. A desktop shortcut and Start Menu entry will be created automatically
-5. Launch **TypeRush** from the desktop or Start Menu
-
-### Step 5 — First Launch
-
-On first launch, the app will automatically generate local files in the installation directory to save your user profile, race history, and dashboard statistics locally.
-
----
-
-## 🎮 Quick Play (Download Release)
-
-You don't need to install Java, compile code, or use IDEs to play this game! It comes bundled with its own runtime environment.
-
-### Step-by-Step Guide:
-
-1. **Download the Game:** Go to the [Releases page](https://github.com/sajibmrbitz/TYPERUSH/releases/latest) and download the `TypeRush_Release.zip` file.
-2. **Extract:** Unzip/extract the downloaded folder anywhere on your Windows PC.
-3. **Play:** Open the extracted folder and double-click on `TypeRush.exe`. 
-
-*(Note: Ensure that the `jre` folder remains in the same directory as the `.exe` file for the game to run properly).*
-
----
-
-## 🚀 Running from Source
-
-If you want to run the project directly without building an EXE (For Developers):
-
-### Prerequisites
-- JDK 17 installed
-- Git installed
-
-### Steps
-
-1. Clone the repository:
-   
-       git clone [https://github.com/sajibmrbitz/TYPERUSH.git](https://github.com/sajibmrbitz/TYPERUSH.git)
-
-2. Navigate to the project directory:
-   
-       cd TYPERUSH
-
-3. Run using the Maven Wrapper:
-   
-       ./mvnw clean javafx:run
+Go to `target/installer/` and double-click **`TypeRush-1.0.0.exe`** to install the game on your system with a desktop shortcut.
 
 ---
 
@@ -177,25 +147,15 @@ If you want to run the project directly without building an EXE (For Developers)
     TYPERUSH/
     ├── src/
     │   ├── main/
-    │   │   ├── java/com/example/TYPERUSH/
-    │   │   │   ├── BaseController.java           # Shared UI logic
-    │   │   │   ├── GameClient.java               # Network client logic
-    │   │   │   ├── GameServer.java               # Network server logic
-    │   │   │   ├── GameSession.java              # Manages current game state
-    │   │   │   ├── HelloApplication.java         # Main JavaFX application class
-    │   │   │   ├── Launcher.java                 # Entry point for the executable
-    │   │   │   ├── MultiplayerGameController.java# Core gameplay UI & logic
-    │   │   │   ├── ProgressListener.java         # Interface for UI updates
-    │   │   │   └── SoundManager.java             # Audio playback
-    │   │   └── resources/
-    │   │       ├── com/example/TYPERUSH/         # FXML layout files and CSS
-    │   │       └── sounds/                       # Audio assets
-    ├── pom.xml                                   # Maven configuration & dependencies
-    └── mvnw / mvnw.cmd                           # Maven wrapper scripts
+    │   │   ├── java/com/example/TYPERUSH/     # Logic & Controllers
+    │   │   └── resources/                     # FXML, CSS, and Sounds
+    ├── pom.xml                               # Maven config
+    └── mvnw                                  # Maven wrapper
 
 ---
 
 ## 📄 License
 
-This project was developed as part of an academic project at **BUET (Bangladesh University of Engineering and Technology)**. 
-Free to use for educational purposes.
+This project was developed as part of an academic project at **BUET**. Free for educational use.
+
+---
